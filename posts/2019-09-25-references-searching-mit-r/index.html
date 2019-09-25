@@ -1,0 +1,1911 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1"/>
+  <meta name="generator" content="distill" />
+
+  <style type="text/css">
+  /* Hide doc at startup (prevent jankiness while JS renders/transforms) */
+  body {
+    visibility: hidden;
+  }
+  </style>
+
+ <!--radix_placeholder_import_source-->
+ <!--/radix_placeholder_import_source-->
+
+  <!--radix_placeholder_meta_tags-->
+<title>kuusisto.de: Eine Methode für reference searching mit R und citecorp</title>
+
+<meta property="description" itemprop="description" content="In diesem Artikel wird ein Arbeitsablauf mit R und citecorp dargestellt, um forward and backward references searching zu erleichtern."/>
+
+<link rel="canonical" href="https://blog.kuusisto.de/posts/2019-09-25-references-searching-mit-r/"/>
+
+<!--  https://schema.org/Article -->
+<meta property="article:published" itemprop="datePublished" content="2019-09-25"/>
+<meta property="article:created" itemprop="dateCreated" content="2019-09-25"/>
+<meta name="article:author" content="Eero Kuusisto-Gussmann"/>
+
+<!--  https://developers.facebook.com/docs/sharing/webmasters#markup -->
+<meta property="og:title" content="kuusisto.de: Eine Methode für reference searching mit R und citecorp"/>
+<meta property="og:type" content="article"/>
+<meta property="og:description" content="In diesem Artikel wird ein Arbeitsablauf mit R und citecorp dargestellt, um forward and backward references searching zu erleichtern."/>
+<meta property="og:url" content="https://blog.kuusisto.de/posts/2019-09-25-references-searching-mit-r/"/>
+<meta property="og:image" content="https://blog.kuusisto.de/posts/2019-09-25-references-searching-mit-r/preview.jpg"/>
+<meta property="og:locale" content="en_US"/>
+<meta property="og:site_name" content="kuusisto.de"/>
+
+<!--  https://dev.twitter.com/cards/types/summary -->
+<meta property="twitter:card" content="summary_large_image"/>
+<meta property="twitter:title" content="kuusisto.de: Eine Methode für reference searching mit R und citecorp"/>
+<meta property="twitter:description" content="In diesem Artikel wird ein Arbeitsablauf mit R und citecorp dargestellt, um forward and backward references searching zu erleichtern."/>
+<meta property="twitter:url" content="https://blog.kuusisto.de/posts/2019-09-25-references-searching-mit-r/"/>
+<meta property="twitter:image" content="https://blog.kuusisto.de/posts/2019-09-25-references-searching-mit-r/preview.jpg"/>
+<meta property="twitter:site" content="@eerok"/>
+
+<!--  https://scholar.google.com/intl/en/scholar/inclusion.html#indexing -->
+<meta name="citation_title" content="kuusisto.de: Eine Methode für reference searching mit R und citecorp"/>
+<meta name="citation_fulltext_html_url" content="https://blog.kuusisto.de/posts/2019-09-25-references-searching-mit-r/"/>
+<meta name="citation_online_date" content="2019/09/25"/>
+<meta name="citation_publication_date" content="2019/09/25"/>
+<meta name="citation_author" content="Eero Kuusisto-Gussmann"/>
+<!--/radix_placeholder_meta_tags-->
+  
+  <meta name="citation_reference" content="citation_title=Reporting Standards for Literature Searches and Report Inclusion Criteria: Making Research Syntheses More Transparent and Easy to Replicate;citation_publication_date=2015;citation_volume=6;citation_doi=10.1002/jrsm.1127;citation_author=Kayla M. Atkinson;citation_author=Alison C. Koenka;citation_author=Carmen E. Sanchez;citation_author=Hannah Moshontz;citation_author=Harris Cooper"/>
+  <meta name="citation_reference" content="citation_title=Network Visualization with ggplot2;citation_publication_date=2017;citation_volume=9;citation_author=Sam Tyner;citation_author=François Briatte;citation_author=Heike Hoffmann"/>
+  <meta name="citation_reference" content="citation_title=citecorp: Client for the Open Citations Corpus;citation_publication_date=2019;citation_author=Scott Chamberlain"/>
+  <meta name="citation_reference" content="citation_title=bib2df: Parse a BibTeX File to a Data Frame;citation_publication_date=2019;citation_author=Philipp Ottolinger"/>
+  <meta name="citation_reference" content="citation_title=rcrossref: Client for Various ’CrossRef’ ’APIs’;citation_publication_date=2019;citation_author=Scott Chamberlain;citation_author=Hao Zhu;citation_author=Najko Jahn;citation_author=Carl Boettiger;citation_author=Karthik Ram"/>
+  <meta name="citation_reference" content="citation_title=fulltext: Full Text of ’Scholarly’ Articles Across Many Data Sources;citation_publication_date=2019;citation_author=Scott Chamberlain"/>
+  <!--radix_placeholder_rmarkdown_metadata-->
+
+<script type="text/json" id="radix-rmarkdown-metadata">
+{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["title","description","author","date","repository_url","output","categories","bibliography","preview","citation_url","canonical_url"]}},"value":[{"type":"character","attributes":{},"value":["Eine Methode für reference searching mit R und citecorp"]},{"type":"character","attributes":{},"value":["In diesem Artikel wird ein Arbeitsablauf mit R und citecorp dargestellt, um forward and backward references searching zu erleichtern."]},{"type":"list","attributes":{},"value":[{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["name"]}},"value":[{"type":"character","attributes":{},"value":["Eero Kuusisto-Gussmann"]}]}]},{"type":"character","attributes":{},"value":["09-25-2019"]},{"type":"character","attributes":{},"value":["https://github.com/eerokg/eerokg.github.io/"]},{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["distill::distill_article"]}},"value":[{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["self_contained"]}},"value":[{"type":"logical","attributes":{},"value":[false]}]}]},{"type":"character","attributes":{},"value":["R","Literatursuche","German"]},{"type":"character","attributes":{},"value":["library.bib"]},{"type":"character","attributes":{},"value":["preview.jpg"]},{"type":"character","attributes":{},"value":["https://blog.kuusisto.de/posts/2019-09-25-references-searching-mit-r/"]},{"type":"character","attributes":{},"value":["https://blog.kuusisto.de/posts/2019-09-25-references-searching-mit-r/"]}]}
+</script>
+<!--/radix_placeholder_rmarkdown_metadata-->
+  
+  <script type="text/json" id="radix-resource-manifest">
+  {"type":"character","attributes":{},"value":["cites_u_refs.txt","cites.csv","library.bib","manual.csv","preview.jpg","references-searching-mit-r_files/bowser-1.9.3/bowser.min.js","references-searching-mit-r_files/distill-2.2.21/template.v2.js","references-searching-mit-r_files/jquery-1.11.3/jquery.min.js","references-searching-mit-r_files/kePrint-0.0.1/kePrint.js","references-searching-mit-r_files/pagedtable-1.1/css/pagedtable.css","references-searching-mit-r_files/pagedtable-1.1/js/pagedtable.js","references-searching-mit-r_files/webcomponents-2.0.0/webcomponents.js","refs.csv"]}
+  </script>
+  <!--radix_placeholder_navigation_in_header-->
+
+<script type="application/javascript">
+
+  window.headroom_prevent_pin = false;
+
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+
+    // initialize headroom for banner
+    var header = $('header').get(0);
+    var headerHeight = header.offsetHeight;
+    var headroom = new Headroom(header, {
+      onPin : function() {
+        if (window.headroom_prevent_pin) {
+          window.headroom_prevent_pin = false;
+          headroom.unpin();
+        }
+      }
+    });
+    headroom.init();
+    if(window.location.hash)
+      headroom.unpin();
+    $(header).addClass('headroom--transition');
+
+    // offset scroll location for banner on hash change
+    // (see: https://github.com/WickyNilliams/headroom.js/issues/38)
+    window.addEventListener("hashchange", function(event) {
+      window.scrollTo(0, window.pageYOffset - (headerHeight + 25));
+    });
+
+    // responsive menu
+    $('.distill-site-header').each(function(i, val) {
+      var topnav = $(this);
+      var toggle = topnav.find('.nav-toggle');
+      toggle.on('click', function() {
+        topnav.toggleClass('responsive');
+      });
+    });
+
+    // nav dropdowns
+    $('.nav-dropbtn').click(function(e) {
+      $(this).next('.nav-dropdown-content').toggleClass('nav-dropdown-active');
+      $(this).parent().siblings('.nav-dropdown')
+         .children('.nav-dropdown-content').removeClass('nav-dropdown-active');
+    });
+    $("body").click(function(e){
+      $('.nav-dropdown-content').removeClass('nav-dropdown-active');
+    });
+    $(".nav-dropdown").click(function(e){
+      e.stopPropagation();
+    });
+  });
+</script>
+
+<style type="text/css">
+
+/* Theme (user-documented overrideables for nav appearance) */
+
+.distill-site-nav {
+  color: rgba(255, 255, 255, 0.8);
+  background-color: #455a64;
+  font-size: 15px;
+  font-weight: 300;
+}
+
+.distill-site-nav a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.distill-site-nav a:hover {
+  color: white;
+}
+
+@media print {
+  .distill-site-nav {
+    display: none;
+  }
+}
+
+.distill-site-header {
+
+}
+
+.distill-site-footer {
+
+}
+
+
+/* Site Header */
+
+.distill-site-header {
+  width: 100%;
+  box-sizing: border-box;
+  z-index: 3;
+}
+
+.distill-site-header .nav-left {
+  display: inline-block;
+  margin-left: 8px;
+}
+
+@media screen and (max-width: 768px) {
+  .distill-site-header .nav-left {
+    margin-left: 0;
+  }
+}
+
+
+.distill-site-header .nav-right {
+  float: right;
+  margin-right: 8px;
+}
+
+.distill-site-header a,
+.distill-site-header .title {
+  display: inline-block;
+  text-align: center;
+  padding: 14px 10px 14px 10px;
+}
+
+.distill-site-header .title {
+  font-size: 18px;
+}
+
+.distill-site-header .logo {
+  padding: 0;
+}
+
+.distill-site-header .logo img {
+  display: none;
+  max-height: 20px;
+  width: auto;
+  margin-bottom: -4px;
+}
+
+.distill-site-header .nav-image img {
+  max-height: 18px;
+  width: auto;
+  display: inline-block;
+  margin-bottom: -3px;
+}
+
+
+
+@media screen and (min-width: 1000px) {
+  .distill-site-header .logo img {
+    display: inline-block;
+  }
+  .distill-site-header .nav-left {
+    margin-left: 20px;
+  }
+  .distill-site-header .nav-right {
+    margin-right: 20px;
+  }
+  .distill-site-header .title {
+    padding-left: 12px;
+  }
+}
+
+
+.distill-site-header .nav-toggle {
+  display: none;
+}
+
+.nav-dropdown {
+  display: inline-block;
+  position: relative;
+}
+
+.nav-dropdown .nav-dropbtn {
+  border: none;
+  outline: none;
+  color: rgba(255, 255, 255, 0.8);
+  padding: 16px 10px;
+  background-color: transparent;
+  font-family: inherit;
+  font-size: inherit;
+  font-weight: inherit;
+  margin: 0;
+  margin-top: 1px;
+  z-index: 2;
+}
+
+.nav-dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: white;
+  min-width: 200px;
+  border: 1px solid rgba(0,0,0,0.15);
+  border-radius: 4px;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.1);
+  z-index: 1;
+  margin-top: 2px;
+  white-space: nowrap;
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+.nav-dropdown-content hr {
+  margin-top: 4px;
+  margin-bottom: 4px;
+  border: none;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.nav-dropdown-active {
+  display: block;
+}
+
+.nav-dropdown-content a, .nav-dropdown-content .nav-dropdown-header {
+  color: black;
+  padding: 6px 24px;
+  text-decoration: none;
+  display: block;
+  text-align: left;
+}
+
+.nav-dropdown-content .nav-dropdown-header {
+  display: block;
+  padding: 5px 24px;
+  padding-bottom: 0;
+  text-transform: uppercase;
+  font-size: 14px;
+  color: #999999;
+  white-space: nowrap;
+}
+
+.nav-dropdown:hover .nav-dropbtn {
+  color: white;
+}
+
+.nav-dropdown-content a:hover {
+  background-color: #ddd;
+  color: black;
+}
+
+.nav-right .nav-dropdown-content {
+  margin-left: -45%;
+  right: 0;
+}
+
+@media screen and (max-width: 768px) {
+  .distill-site-header a, .distill-site-header .nav-dropdown  {display: none;}
+  .distill-site-header a.nav-toggle {
+    float: right;
+    display: block;
+  }
+  .distill-site-header .title {
+    margin-left: 0;
+  }
+  .distill-site-header .nav-right {
+    margin-right: 0;
+  }
+  .distill-site-header {
+    overflow: hidden;
+  }
+  .nav-right .nav-dropdown-content {
+    margin-left: 0;
+  }
+}
+
+
+@media screen and (max-width: 768px) {
+  .distill-site-header.responsive {position: relative;}
+  .distill-site-header.responsive a.nav-toggle {
+    position: absolute;
+    right: 0;
+    top: 0;
+  }
+  .distill-site-header.responsive a,
+  .distill-site-header.responsive .nav-dropdown {
+    display: block;
+    text-align: left;
+  }
+  .distill-site-header.responsive .nav-left,
+  .distill-site-header.responsive .nav-right {
+    width: 100%;
+  }
+  .distill-site-header.responsive .nav-dropdown {float: none;}
+  .distill-site-header.responsive .nav-dropdown-content {position: relative;}
+  .distill-site-header.responsive .nav-dropdown .nav-dropbtn {
+    display: block;
+    width: 100%;
+    text-align: left;
+  }
+}
+
+/* Site Footer */
+
+.distill-site-footer {
+  width: 100%;
+  overflow: hidden;
+  box-sizing: border-box;
+  z-index: 3;
+  margin-top: 30px;
+  padding-top: 30px;
+  padding-bottom: 30px;
+  text-align: center;
+}
+
+/* Headroom */
+
+d-title {
+  padding-top: 6rem;
+}
+
+@media print {
+  d-title {
+    padding-top: 4rem;
+  }
+}
+
+.headroom {
+  z-index: 1000;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+}
+
+.headroom--transition {
+  transition: all .4s ease-in-out;
+}
+
+.headroom--unpinned {
+  top: -100px;
+}
+
+.headroom--pinned {
+  top: 0;
+}
+
+</style>
+
+<link href="../../site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet"/>
+<link href="../../site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet"/>
+<script src="../../site_libs/headroom-0.9.4/headroom.min.js"></script>
+<!--/radix_placeholder_navigation_in_header-->
+  <!--radix_placeholder_distill-->
+
+<style type="text/css">
+
+body {
+  background-color: white;
+}
+
+.pandoc-table {
+  width: 100%;
+}
+
+.pandoc-table>caption {
+  margin-bottom: 10px;
+}
+
+.pandoc-table th:not([align]) {
+  text-align: left;
+}
+
+.pagedtable-footer {
+  font-size: 15px;
+}
+
+.html-widget {
+  margin-bottom: 2.0em;
+}
+
+.l-screen-inset {
+  padding-right: 16px;
+}
+
+.l-screen .caption {
+  margin-left: 10px;
+}
+
+.shaded {
+  background: rgb(247, 247, 247);
+  padding-top: 20px;
+  padding-bottom: 20px;
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.shaded .html-widget {
+  margin-bottom: 0;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.shaded .shaded-content {
+  background: white;
+}
+
+.text-output {
+  margin-top: 0;
+  line-height: 1.5em;
+}
+
+.hidden {
+  display: none !important;
+}
+
+d-article {
+  padding-bottom: 30px;
+}
+
+d-appendix {
+  padding-top: 30px;
+}
+
+d-article>p>img {
+  width: 100%;
+}
+
+d-article iframe {
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  margin-bottom: 2.0em;
+  width: 100%;
+}
+
+figure img.external {
+  background: white;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  box-shadow: 0 1px 8px rgba(0, 0, 0, 0.1);
+  padding: 18px;
+  box-sizing: border-box;
+}
+
+/* CSS for table of contents */
+
+.d-toc {
+  color: rgba(0,0,0,0.8);
+  font-size: 0.8em;
+  line-height: 1em;
+}
+
+.d-toc-header {
+  font-size: 0.6rem;
+  font-weight: 400;
+  color: rgba(0, 0, 0, 0.5);
+  text-transform: uppercase;
+  margin-top: 0;
+  margin-bottom: 1.3em;
+}
+
+.d-toc a {
+  border-bottom: none;
+}
+
+.d-toc ul {
+  padding-left: 0;
+}
+
+.d-toc li>ul {
+  padding-top: 0.8em;
+  padding-left: 16px;
+  margin-bottom: 0.6em;
+}
+
+.d-toc ul,
+.d-toc li {
+  list-style-type: none;
+}
+
+.d-toc li {
+  margin-bottom: 0.9em;
+}
+
+.d-toc-separator {
+  margin-top: 20px;
+  margin-bottom: 2em;
+}
+
+.d-article-with-toc {
+  border-top: none;
+  padding-top: 0;
+}
+
+
+
+/* Tweak code blocks (note that this CSS is repeated above in an injection
+   into the d-code shadow dom) */
+
+d-code {
+  overflow-x: auto !important;
+}
+
+pre.d-code code.d-code {
+  padding-left: 10px;
+  font-size: 12px;
+  border-left: 2px solid rgba(0,0,0,0.1);
+}
+
+pre.text-output {
+
+  font-size: 12px;
+  color: black;
+  background: none;
+  font-family: Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;
+  text-align: left;
+  white-space: pre;
+  word-spacing: normal;
+  word-break: normal;
+  word-wrap: normal;
+  line-height: 1.5;
+
+  -moz-tab-size: 4;
+  -o-tab-size: 4;
+  tab-size: 4;
+
+  -webkit-hyphens: none;
+  -moz-hyphens: none;
+  -ms-hyphens: none;
+  hyphens: none;
+}
+
+@media(min-width: 768px) {
+
+d-code {
+  overflow-x: visible !important;
+}
+
+pre.d-code code.d-code  {
+    padding-left: 18px;
+    font-size: 14px;
+}
+pre.text-output {
+  font-size: 14px;
+}
+}
+
+/* Figure */
+
+.figure {
+  position: relative;
+  margin-bottom: 2.5em;
+  margin-top: 1.5em;
+}
+
+.figure img {
+  width: 100%;
+}
+
+.figure .caption {
+  color: rgba(0, 0, 0, 0.6);
+  font-size: 12px;
+  line-height: 1.5em;
+}
+
+.figure img.external {
+  background: white;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  box-shadow: 0 1px 8px rgba(0, 0, 0, 0.1);
+  padding: 18px;
+  box-sizing: border-box;
+}
+
+.figure .caption a {
+  color: rgba(0, 0, 0, 0.6);
+}
+
+.figure .caption b,
+.figure .caption strong, {
+  font-weight: 600;
+  color: rgba(0, 0, 0, 1.0);
+}
+
+
+
+/* Tweak 1000px media break to show more text */
+
+@media(min-width: 1000px) {
+  .base-grid,
+  distill-header,
+  d-title,
+  d-abstract,
+  d-article,
+  d-appendix,
+  distill-appendix,
+  d-byline,
+  d-footnote-list,
+  d-citation-list,
+  distill-footer {
+    grid-template-columns: [screen-start] 1fr [page-start kicker-start] 80px [middle-start] 50px [text-start kicker-end] 65px 65px 65px 65px 65px 65px 65px 65px [text-end gutter-start] 65px [middle-end] 65px [page-end gutter-end] 1fr [screen-end];
+    grid-column-gap: 16px;
+  }
+
+  .grid {
+    grid-column-gap: 16px;
+  }
+
+  d-article {
+    font-size: 1.06rem;
+    line-height: 1.7em;
+  }
+  figure .caption, .figure .caption, figure figcaption {
+    font-size: 13px;
+  }
+}
+
+@media(min-width: 1180px) {
+  .base-grid,
+  distill-header,
+  d-title,
+  d-abstract,
+  d-article,
+  d-appendix,
+  distill-appendix,
+  d-byline,
+  d-footnote-list,
+  d-citation-list,
+  distill-footer {
+    grid-template-columns: [screen-start] 1fr [page-start kicker-start] 60px [middle-start] 60px [text-start kicker-end] 60px 60px 60px 60px 60px 60px 60px 60px [text-end gutter-start] 60px [middle-end] 60px [page-end gutter-end] 1fr [screen-end];
+    grid-column-gap: 32px;
+  }
+
+  .grid {
+    grid-column-gap: 32px;
+  }
+}
+
+
+/* Get the citation styles for the appendix (not auto-injected on render since
+   we do our own rendering of the citation appendix) */
+
+d-appendix .citation-appendix,
+.d-appendix .citation-appendix {
+  font-size: 11px;
+  line-height: 15px;
+  border-left: 1px solid rgba(0, 0, 0, 0.1);
+  padding-left: 18px;
+  border: 1px solid rgba(0,0,0,0.1);
+  background: rgba(0, 0, 0, 0.02);
+  padding: 10px 18px;
+  border-radius: 3px;
+  color: rgba(150, 150, 150, 1);
+  overflow: hidden;
+  margin-top: -12px;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+}
+
+
+/* Social footer */
+
+.social_footer {
+  margin-top: 30px;
+  margin-bottom: 0;
+  color: rgba(0,0,0,0.67);
+}
+
+.disqus-comments {
+  margin-right: 30px;
+}
+
+.disqus-comment-count {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.4);
+  cursor: pointer;
+}
+
+#disqus_thread {
+  margin-top: 30px;
+}
+
+.article-sharing a {
+  border-bottom: none;
+  margin-right: 8px;
+}
+
+.article-sharing a:hover {
+  border-bottom: none;
+}
+
+.sidebar-section.subscribe {
+  font-size: 12px;
+  line-height: 1.6em;
+}
+
+.subscribe p {
+  margin-bottom: 0.5em;
+}
+
+
+.article-footer .subscribe {
+  font-size: 15px;
+  margin-top: 45px;
+}
+
+
+/* Improve display for browsers without grid (IE/Edge <= 15) */
+
+.downlevel {
+  line-height: 1.6em;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Fira Sans", "Droid Sans", "Helvetica Neue", Arial, sans-serif;
+  margin: 0;
+}
+
+.downlevel .d-title {
+  padding-top: 6rem;
+  padding-bottom: 1.5rem;
+}
+
+.downlevel .d-title h1 {
+  font-size: 50px;
+  font-weight: 700;
+  line-height: 1.1em;
+  margin: 0 0 0.5rem;
+}
+
+.downlevel .d-title p {
+  font-weight: 300;
+  font-size: 1.2rem;
+  line-height: 1.55em;
+  margin-top: 0;
+}
+
+.downlevel .d-byline {
+  padding-top: 0.8em;
+  padding-bottom: 0.8em;
+  font-size: 0.8rem;
+  line-height: 1.8em;
+}
+
+.downlevel .section-separator {
+  border: none;
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.downlevel .d-article {
+  font-size: 1.06rem;
+  line-height: 1.7em;
+  padding-top: 1rem;
+  padding-bottom: 2rem;
+}
+
+
+.downlevel .d-appendix {
+  padding-left: 0;
+  padding-right: 0;
+  max-width: none;
+  font-size: 0.8em;
+  line-height: 1.7em;
+  margin-bottom: 0;
+  color: rgba(0,0,0,0.5);
+  padding-top: 40px;
+  padding-bottom: 48px;
+}
+
+.downlevel .footnotes ol {
+  padding-left: 13px;
+}
+
+.downlevel .base-grid,
+.downlevel .distill-header,
+.downlevel .d-title,
+.downlevel .d-abstract,
+.downlevel .d-article,
+.downlevel .d-appendix,
+.downlevel .distill-appendix,
+.downlevel .d-byline,
+.downlevel .d-footnote-list,
+.downlevel .d-citation-list,
+.downlevel .distill-footer,
+.downlevel .appendix-bottom,
+.downlevel .posts-container {
+  padding-left: 40px;
+  padding-right: 40px;
+}
+
+@media(min-width: 768px) {
+  .downlevel .base-grid,
+  .downlevel .distill-header,
+  .downlevel .d-title,
+  .downlevel .d-abstract,
+  .downlevel .d-article,
+  .downlevel .d-appendix,
+  .downlevel .distill-appendix,
+  .downlevel .d-byline,
+  .downlevel .d-footnote-list,
+  .downlevel .d-citation-list,
+  .downlevel .distill-footer,
+  .downlevel .appendix-bottom,
+  .downlevel .posts-container {
+  padding-left: 150px;
+  padding-right: 150px;
+  max-width: 900px;
+}
+}
+
+.downlevel pre code {
+  display: block;
+  border-left: 2px solid rgba(0, 0, 0, .1);
+  padding: 0 0 0 20px;
+  font-size: 14px;
+}
+
+.downlevel code, .downlevel pre {
+  color: black;
+  background: none;
+  font-family: Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;
+  text-align: left;
+  white-space: pre;
+  word-spacing: normal;
+  word-break: normal;
+  word-wrap: normal;
+  line-height: 1.5;
+
+  -moz-tab-size: 4;
+  -o-tab-size: 4;
+  tab-size: 4;
+
+  -webkit-hyphens: none;
+  -moz-hyphens: none;
+  -ms-hyphens: none;
+  hyphens: none;
+}
+
+</style>
+
+<script type="application/javascript">
+
+function is_downlevel_browser() {
+  if (bowser.isUnsupportedBrowser({ msie: "12", msedge: "16"},
+                                 window.navigator.userAgent)) {
+    return true;
+  } else {
+    return window.load_distill_framework === undefined;
+  }
+}
+
+// show body when load is complete
+function on_load_complete() {
+
+  // set body to visible
+  document.body.style.visibility = 'visible';
+
+  // force redraw for leaflet widgets
+  if (window.HTMLWidgets) {
+    var maps = window.HTMLWidgets.findAll(".leaflet");
+    $.each(maps, function(i, el) {
+      var map = this.getMap();
+      map.invalidateSize();
+      map.eachLayer(function(layer) {
+        if (layer instanceof L.TileLayer)
+          layer.redraw();
+      });
+    });
+  }
+
+  // trigger 'shown' so htmlwidgets resize
+  $('d-article').trigger('shown');
+}
+
+function init_distill() {
+
+  init_common();
+
+  // create front matter
+  var front_matter = $('<d-front-matter></d-front-matter>');
+  $('#distill-front-matter').wrap(front_matter);
+
+  // create d-title
+  $('.d-title').changeElementType('d-title');
+
+  // create d-byline
+  var byline = $('<d-byline></d-byline>');
+  $('.d-byline').replaceWith(byline);
+
+  // create d-article
+  var article = $('<d-article></d-article>');
+  $('.d-article').wrap(article).children().unwrap();
+
+  // move posts container into article
+  $('.posts-container').appendTo($('d-article'));
+
+  // create d-appendix
+  $('.d-appendix').changeElementType('d-appendix');
+
+  // create d-bibliography
+  var bibliography = $('<d-bibliography></d-bibliography>');
+  $('#distill-bibliography').wrap(bibliography);
+
+  // flag indicating that we have appendix items
+  var appendix = $('.appendix-bottom').children('h3').length > 0;
+
+  // replace citations with <d-cite>
+  $('.citation').each(function(i, val) {
+    appendix = true;
+    var cites = $(this).attr('data-cites').split(" ");
+    var dt_cite = $('<d-cite></d-cite>');
+    dt_cite.attr('key', cites.join());
+    $(this).replaceWith(dt_cite);
+  });
+  // remove refs
+  $('#refs').remove();
+
+  // replace footnotes with <d-footnote>
+  $('.footnote-ref').each(function(i, val) {
+    appendix = true;
+    var href = $(this).attr('href');
+    var id = href.replace('#', '');
+    var fn = $('#' + id);
+    var fn_p = $('#' + id + '>p');
+    fn_p.find('.footnote-back').remove();
+    var text = fn_p.html();
+    var dtfn = $('<d-footnote></d-footnote>');
+    dtfn.html(text);
+    $(this).replaceWith(dtfn);
+  });
+  // remove footnotes
+  $('.footnotes').remove();
+
+  $('h1.appendix, h2.appendix').each(function(i, val) {
+    $(this).changeElementType('h3');
+  });
+  $('h3.appendix').each(function(i, val) {
+    var id = $(this).attr('id');
+    $('.d-toc a[href="#' + id + '"]').parent().remove();
+    appendix = true;
+    $(this).nextUntil($('h1, h2, h3')).addBack().appendTo($('d-appendix'));
+  });
+
+  // show d-appendix if we have appendix content
+  $("d-appendix").css('display', appendix ? 'grid' : 'none');
+
+  // replace code blocks with d-code
+  $('pre>code').each(function(i, val) {
+    var code = $(this);
+    var pre = code.parent();
+    var clz = "";
+    var language = pre.attr('class');
+    if (language) {
+      // map unknown languages to "clike" (without this they just dissapear)
+      if ($.inArray(language, ["bash", "clike", "css", "go", "html",
+                               "javascript", "js", "julia", "lua", "markdown",
+                               "markup", "mathml", "python", "svg", "xml"]) == -1)
+        language = "clike";
+      language = ' language="' + language + '"';
+      var dt_code = $('<d-code block' + language + clz + '></d-code>');
+      dt_code.text(code.text());
+      pre.replaceWith(dt_code);
+    } else {
+      code.addClass('text-output').unwrap().changeElementType('pre');
+    }
+  });
+
+  // localize layout chunks to just output
+  $('.layout-chunk').each(function(i, val) {
+
+    // capture layout
+    var layout = $(this).attr('data-layout');
+
+    // apply layout to markdown level block elements
+    var elements = $(this).children().not('d-code, pre.text-output, script');
+    elements.each(function(i, el) {
+      var layout_div = $('<div class="' + layout + '"></div>');
+      if (layout_div.hasClass('shaded')) {
+        var shaded_content = $('<div class="shaded-content"></div>');
+        $(this).wrap(shaded_content);
+        $(this).parent().wrap(layout_div);
+      } else {
+        $(this).wrap(layout_div);
+      }
+    });
+
+
+    // unwrap the layout-chunk div
+    $(this).children().unwrap();
+  });
+
+  // load distill framework
+  load_distill_framework();
+
+  // wait for window.distillRunlevel == 4 to do post processing
+  function distill_post_process() {
+
+    if (!window.distillRunlevel || window.distillRunlevel < 4)
+      return;
+
+    // hide author/affiliations entirely if we have no authors
+    var front_matter = JSON.parse($("#distill-front-matter").html());
+    var have_authors = front_matter.authors && front_matter.authors.length > 0;
+    if (!have_authors)
+      $('d-byline').addClass('hidden');
+
+    // table of contents
+    if (have_authors) // adjust border if we are in authors
+      $('.d-toc').parent().addClass('d-article-with-toc');
+
+    // strip links that point to #
+    $('.authors-affiliations').find('a[href="#"]').removeAttr('href');
+
+    // hide elements of author/affiliations grid that have no value
+    function hide_byline_column(caption) {
+      $('d-byline').find('h3:contains("' + caption + '")').parent().css('visibility', 'hidden');
+    }
+
+    // affiliations
+    var have_affiliations = false;
+    for (var i = 0; i<front_matter.authors.length; ++i) {
+      var author = front_matter.authors[i];
+      if (author.affiliation !== "&nbsp;") {
+        have_affiliations = true;
+        break;
+      }
+    }
+    if (!have_affiliations)
+      $('d-byline').find('h3:contains("Affiliations")').css('visibility', 'hidden');
+
+    // published date
+    if (!front_matter.publishedDate)
+      hide_byline_column("Published");
+
+    // document object identifier
+    var doi = $('d-byline').find('h3:contains("DOI")');
+    var doi_p = doi.next().empty();
+    if (!front_matter.doi) {
+      // if we have a citation and valid citationText then link to that
+      if ($('#citation').length > 0 && front_matter.citationText) {
+        doi.html('Citation');
+        $('<a href="#citation"></a>')
+          .text(front_matter.citationText)
+          .appendTo(doi_p);
+      } else {
+        hide_byline_column("DOI");
+      }
+    } else {
+      $('<a></a>')
+         .attr('href', "https://doi.org/" + front_matter.doi)
+         .html(front_matter.doi)
+         .appendTo(doi_p);
+    }
+
+     // change plural form of authors/affiliations
+    if (front_matter.authors.length === 1) {
+      var grid = $('.authors-affiliations');
+      grid.children('h3:contains("Authors")').text('Author');
+      grid.children('h3:contains("Affiliations")').text('Affiliation');
+    }
+
+    // inject pre code styles (can't do this with a global stylesheet b/c a shadow root is used)
+    $('d-code').each(function(i, val) {
+      var style = document.createElement('style');
+      style.innerHTML = 'pre code { padding-left: 10px; font-size: 12px; border-left: 2px solid rgba(0,0,0,0.1); } ' +
+                        '@media(min-width: 768px) { pre code { padding-left: 18px; font-size: 14px; } }';
+      if (this.shadowRoot)
+        this.shadowRoot.appendChild(style);
+    });
+
+    // move appendix-bottom entries to the bottom
+    $('.appendix-bottom').appendTo('d-appendix').children().unwrap();
+    $('.appendix-bottom').remove();
+
+    // clear polling timer
+    clearInterval(tid);
+
+    // show body now that everything is ready
+    on_load_complete();
+  }
+
+  var tid = setInterval(distill_post_process, 50);
+  distill_post_process();
+
+}
+
+function init_downlevel() {
+
+  init_common();
+
+   // insert hr after d-title
+  $('.d-title').after($('<hr class="section-separator"/>'));
+
+  // check if we have authors
+  var front_matter = JSON.parse($("#distill-front-matter").html());
+  var have_authors = front_matter.authors && front_matter.authors.length > 0;
+
+  // manage byline/border
+  if (!have_authors)
+    $('.d-byline').remove();
+  $('.d-byline').after($('<hr class="section-separator"/>'));
+  $('.d-byline a').remove();
+
+  // remove toc
+  $('.d-toc-header').remove();
+  $('.d-toc').remove();
+  $('.d-toc-separator').remove();
+
+  // move appendix elements
+  $('h1.appendix, h2.appendix').each(function(i, val) {
+    $(this).changeElementType('h3');
+  });
+  $('h3.appendix').each(function(i, val) {
+    $(this).nextUntil($('h1, h2, h3')).addBack().appendTo($('.d-appendix'));
+  });
+
+
+  // inject headers into references and footnotes
+  var refs_header = $('<h3></h3>');
+  refs_header.text('References');
+  $('#refs').prepend(refs_header);
+
+  var footnotes_header = $('<h3></h3');
+  footnotes_header.text('Footnotes');
+  $('.footnotes').children('hr').first().replaceWith(footnotes_header);
+
+  // move appendix-bottom entries to the bottom
+  $('.appendix-bottom').appendTo('.d-appendix').children().unwrap();
+  $('.appendix-bottom').remove();
+
+  // remove appendix if it's empty
+  if ($('.d-appendix').children().length === 0)
+    $('.d-appendix').remove();
+
+  // prepend separator above appendix
+  $('.d-appendix').before($('<hr class="section-separator" style="clear: both"/>'));
+
+  // trim code
+  $('pre>code').each(function(i, val) {
+    $(this).html($.trim($(this).html()));
+  });
+
+  // move posts-container right before article
+  $('.posts-container').insertBefore($('.d-article'));
+
+  $('body').addClass('downlevel');
+
+  on_load_complete();
+}
+
+
+function init_common() {
+
+  // jquery plugin to change element types
+  (function($) {
+    $.fn.changeElementType = function(newType) {
+      var attrs = {};
+
+      $.each(this[0].attributes, function(idx, attr) {
+        attrs[attr.nodeName] = attr.nodeValue;
+      });
+
+      this.replaceWith(function() {
+        return $("<" + newType + "/>", attrs).append($(this).contents());
+      });
+    };
+  })(jQuery);
+
+  // prevent underline for linked images
+  $('a > img').parent().css({'border-bottom' : 'none'});
+
+  // mark non-body figures created by knitr chunks as 100% width
+  $('.layout-chunk').each(function(i, val) {
+    var figures = $(this).find('img, .html-widget');
+    if ($(this).attr('data-layout') !== "l-body") {
+      figures.css('width', '100%');
+    } else {
+      figures.css('max-width', '100%');
+      figures.filter("[width]").each(function(i, val) {
+        var fig = $(this);
+        fig.css('width', fig.attr('width') + 'px');
+      });
+
+    }
+  });
+
+  // auto-append index.html to post-preview links in file: protocol
+  // and in rstudio ide preview
+  $('.post-preview').each(function(i, val) {
+    if (window.location.protocol === "file:")
+      $(this).attr('href', $(this).attr('href') + "index.html");
+  });
+
+  // get rid of index.html references in header
+  if (window.location.protocol !== "file:") {
+    $('.distill-site-header a[href]').each(function(i,val) {
+      $(this).attr('href', $(this).attr('href').replace("index.html", "./"));
+    });
+  }
+
+  // add class to pandoc style tables
+  $('tr.header').parent('thead').parent('table').addClass('pandoc-table');
+  $('.kable-table').children('table').addClass('pandoc-table');
+
+  // add figcaption style to table captions
+  $('caption').parent('table').addClass("figcaption");
+
+  // initialize posts list
+  if (window.init_posts_list)
+    window.init_posts_list();
+
+  // implmement disqus comment link
+  $('.disqus-comment-count').click(function() {
+    window.headroom_prevent_pin = true;
+    $('#disqus_thread').toggleClass('hidden');
+    if (!$('#disqus_thread').hasClass('hidden')) {
+      var offset = $(this).offset();
+      $(window).resize();
+      $('html, body').animate({
+        scrollTop: offset.top - 35
+      });
+    }
+  });
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+  if (is_downlevel_browser())
+    init_downlevel();
+  else
+    window.addEventListener('WebComponentsReady', init_distill);
+});
+
+</script>
+
+<!--/radix_placeholder_distill-->
+  <script src="../../site_libs/kePrint-0.0.1/kePrint.js"></script>
+  <script src="../../site_libs/jquery-1.11.3/jquery.min.js"></script>
+  <script src="../../site_libs/bowser-1.9.3/bowser.min.js"></script>
+  <script src="../../site_libs/webcomponents-2.0.0/webcomponents.js"></script>
+  <script src="../../site_libs/distill-2.2.21/template.v2.js"></script>
+  <!--radix_placeholder_site_in_header-->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-148515502-1"></script>
+<script>
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'UA-148515502-1');
+</script>
+<style type="text/css">
+*{font-family: 'Fira Sans', sans-serif;}
+.bold{font-weight:bold;}
+.italic{font-style: italic;}
+.oblique{font-style: oblique;}
+
+code,
+.code,
+pre {
+  font-family: "Lucida Sans Typewriter", "Lucida Console", monaco, "Bitstream Vera Sans Mono", monospace; 
+  background: #fff6f2;
+  font-size: 15px;
+  padding: 0;
+  padding: 2px;
+  border-radius: 4px;
+  }
+
+.distill-site-nav {
+  color: #E95420;
+  background-color: #f7f7f7;
+  font-size: 15px;
+  font-weight: bold;
+}
+
+.distill-site-nav a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.distill-site-nav a:hover {
+  color: gray;
+}
+
+.distill-site-header {
+}
+
+.distill-site-footer {
+  font-size: 12px;
+  font-weight: 300;
+}
+
+@media print {
+  .distill-site-nav {
+    display: none;
+  }
+}
+.icon-link {
+  border: none;
+}
+</style>
+<!--/radix_placeholder_site_in_header-->
+
+
+</head>
+
+<body>
+
+<!--radix_placeholder_front_matter-->
+
+<script id="distill-front-matter" type="text/json">
+{"title":"Eine Methode für reference searching mit R und citecorp","description":"In diesem Artikel wird ein Arbeitsablauf mit R und citecorp dargestellt, um forward and backward references searching zu erleichtern.","authors":[{"author":"Eero Kuusisto-Gussmann","authorURL":"#","affiliation":"&nbsp;","affiliationURL":"#"}],"publishedDate":"2019-09-25T00:00:00.000+02:00","citationText":"Kuusisto-Gussmann, 2019"}
+</script>
+
+<!--/radix_placeholder_front_matter-->
+<!--radix_placeholder_navigation_before_body-->
+<header class="header header--fixed" role="banner">
+<nav class="distill-site-nav distill-site-header">
+<div class="nav-left">
+<a href="../../index.html" class="title">kuusisto.de</a>
+</div>
+<div class="nav-right">
+<a href="../../index.html">Posts</a>
+<a href="../../about.html">Über mich</a>
+<a href="javascript:void(0);" class="nav-toggle">&#9776;</a>
+</div>
+</nav>
+</header>
+<!--/radix_placeholder_navigation_before_body-->
+<!--radix_placeholder_site_before_body-->
+<!--/radix_placeholder_site_before_body-->
+
+<div class="d-title">
+<h1>Eine Methode für reference searching mit R und citecorp</h1>
+<p>In diesem Artikel wird ein Arbeitsablauf mit R und citecorp dargestellt, um forward and backward references searching zu erleichtern.</p>
+</div>
+
+<div class="d-byline">
+  
+  Eero Kuusisto-Gussmann
+  
+<br/>09-25-2019
+</div>
+
+<div class="d-article">
+<h1 id="hintergrund">Hintergrund</h1>
+<p>Das sogenannte <em>backward and forward references searching</em> im Rahmen einer systematischen Literatursuche bleibt immer noch größtenteils Handarbeit, obwohl viele technische Hilfsmittel u.a. in Form von Datenbanken mit Zitierungsangaben (z.B. <a href="http://www.webofknowledge.com">Web of Science</a>) bereits zur Verfügung stehen. Die Referenzen werden häufig manuell aus den PDF-Dateien extrahiert und per Hand in die Suchmasken eingegeben<span class="citation" data-cites="atkinson2015">(Atkinson et al. <a href="#ref-atkinson2015">2015</a>)</span>. Anschließend werden die Ergebnisse z.B. in <em>Research Information Systems</em> (<code>.ris</code>)-Format exportiert und damit in das Literaturverwaltungsprogramm importiert. Häufig sind die benutzten Suchmaschinen für <em>references searching</em> zudem kostenpflichtig und setzen damit einen institutionellen Zugang voraus.<br />
+Im Folgenden wird ein beispielhafter Arbeitsablauf mit der freien statistischen Programmiersprache <a href="https://www.r-project.org">R</a> und dem neuen <code>citecorp</code>-Paket<span class="citation" data-cites="citecorp2019">(Chamberlain <a href="#ref-citecorp2019">2019</a><a href="#ref-citecorp2019">a</a>)</span> dargestellt. <code>citecorp</code> ruft Daten über Zitationen aus der kostenlosen und offen zugänglichen <a href="https://opencitations.net/index/coci">COCI</a> (<em>OpenCitations Index of Crossref open DOI-to-DOI references</em>) ab und ist Teil der im Jahr 2011 gegründenten <a href="https://ropensci.org/">rOpenSci Initiative</a>, die offene, reproduzierbare Forschung durch Open Source Software und Data Sharing fördert.</p>
+<h1 id="ablauf">Ablauf</h1>
+<p>Die wichtigste Voraussetzung ist selbständlicherweise eine aktuelle Version von <a href="https://www.r-project.org">R</a>, die – sowie alle in diesem Artikel verwendeten Werkzeuge – kostenlos verfügbar ist. Für das Herunterladen der Zitierangaben und für die weitere Bearbeitung der Daten werden darüber hinaus drei Pakete benötigt:</p>
+<div class="layout-chunk" data-layout="l-body">
+<pre class="r"><code>
+# Pakete bei Bedarf installieren:
+# install.packages(c(&quot;citecorp&quot;, &quot;bib2df&quot;, &quot;tidyverse&quot;)
+
+# Für das Herunterladen der Zitierangaben:
+library(citecorp)
+# Um BibTeX-Dateien zu importieren:
+library(bib2df)
+# Für weitere Bearbeitung und Darstellung der Daten:
+library(tidyverse)</code></pre>
+</div>
+<h2 id="importieren-der-literaturangaben">Importieren der Literaturangaben</h2>
+<p>Für dieses Beispiel habe ich eine <code>BibTeX</code>-Datei – <code>testbib.bib</code><a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a> – aus <a href="http://zotero.org">Zotero</a> mit dem Plugin <a href="http://retorque.re/zotero-better-bibtex/"><code>BetterBibTeX</code></a> exportiert. In der Datei sind die Angaben von sieben Studien enthalten. Mit dem <code>bib2df</code>-Paketen<span class="citation" data-cites="bib2df2019">(Ottolinger <a href="#ref-bib2df2019">2019</a>)</span> können diese Daten sehr einfach und in diesem Fall ohne Angabe von weiteren Argumenten importiert und in ein <em>data frame</em> in R umgewandelt werden:</p>
+<div class="layout-chunk" data-layout="l-body">
+<pre class="r"><code>
+studien &lt;- bib2df(&quot;/Users/eerokuusisto/git/kuusisto_de/files/testbib.bib&quot;)</code></pre>
+</div>
+<p>Falls es dabei Warnmeldungen wegen fehlenden Daten geben sollte, können diese ignoriert werden. Wir interessieren uns eigentlich nur für die DOIs, welche wir für die weitere Bearbeitung mit <code>citecorp</code> benötigen. Obwohl <code>citecorp</code> auch andere Identifizierungsmöglichkeiten (z.B. PMID) anbietet, <strong>müssen</strong> in diesem Beispiel alle Studien auch einen DOI haben.<br />
+<br />
+Schauen wir die Daten erst mal kurz an:</p>
+<div class="layout-chunk" data-layout="l-body">
+<pre class="r"><code>
+# Inhalt des data frames anzeigen:
+studien</code></pre>
+<pre><code>
+# A tibble: 7 x 32
+  CATEGORY BIBTEXKEY ADDRESS ANNOTE AUTHOR BOOKTITLE CHAPTER CROSSREF
+  &lt;chr&gt;    &lt;chr&gt;     &lt;chr&gt;   &lt;chr&gt;  &lt;list&gt; &lt;chr&gt;     &lt;chr&gt;   &lt;chr&gt;   
+1 ARTICLE  andersso… &lt;NA&gt;    &lt;NA&gt;   &lt;chr … &lt;NA&gt;      &lt;NA&gt;    &lt;NA&gt;    
+2 ARTICLE  cohenDel… &lt;NA&gt;    &lt;NA&gt;   &lt;chr … &lt;NA&gt;      &lt;NA&gt;    &lt;NA&gt;    
+3 ARTICLE  fagerber… &lt;NA&gt;    &lt;NA&gt;   &lt;chr … &lt;NA&gt;      &lt;NA&gt;    &lt;NA&gt;    
+4 ARTICLE  granberg… &lt;NA&gt;    &lt;NA&gt;   &lt;chr … &lt;NA&gt;      &lt;NA&gt;    &lt;NA&gt;    
+5 ARTICLE  andersso… &lt;NA&gt;    &lt;NA&gt;   &lt;chr … &lt;NA&gt;      &lt;NA&gt;    &lt;NA&gt;    
+6 ARTICLE  claesson… &lt;NA&gt;    &lt;NA&gt;   &lt;chr … &lt;NA&gt;      &lt;NA&gt;    &lt;NA&gt;    
+7 ARTICLE  flynnPos… &lt;NA&gt;    &lt;NA&gt;   &lt;chr … &lt;NA&gt;      &lt;NA&gt;    &lt;NA&gt;    
+# … with 24 more variables: EDITION &lt;chr&gt;, EDITOR &lt;list&gt;,
+#   HOWPUBLISHED &lt;chr&gt;, INSTITUTION &lt;chr&gt;, JOURNAL &lt;chr&gt;, KEY &lt;chr&gt;,
+#   MONTH &lt;chr&gt;, NOTE &lt;chr&gt;, NUMBER &lt;chr&gt;, ORGANIZATION &lt;chr&gt;,
+#   PAGES &lt;chr&gt;, PUBLISHER &lt;chr&gt;, SCHOOL &lt;chr&gt;, SERIES &lt;chr&gt;,
+#   TITLE &lt;chr&gt;, TYPE &lt;chr&gt;, VOLUME &lt;chr&gt;, YEAR &lt;chr&gt;,
+#   LANGUAGE &lt;chr&gt;, DOI &lt;chr&gt;, KEYWORDS &lt;chr&gt;, SHORTTITLE &lt;chr&gt;,
+#   PMID &lt;chr&gt;, PMCID &lt;chr&gt;</code></pre>
+</div>
+<p>Das sieht leider sehr unübersichtlich aus, da auch die unbenutzen, leeren <code>BibTeX</code>-Felder in dem <em>data frame</em> vorhanden sind! Zum Glück brauchen wir eigentlich nur eine Spalte davon, deren Namen wir nun kennen:</p>
+<div class="layout-chunk" data-layout="l-body">
+<pre class="r"><code>
+# Die DOIs:
+studien$DOI</code></pre>
+<pre><code>
+[1] &quot;10.1002/gps.682&quot;                 
+[2] &quot;10.1177/082585970902500303&quot;      
+[3] &quot;10.1046/j.1365-2850.2002.00498.x&quot;
+[4] &quot;10.1016/S0964-3397(99)80062-7&quot;   
+[5] &quot;10.1016/S0020-7489(01)00022-0&quot;   
+[6] &quot;10.1186/s12912-015-0069-7&quot;       
+[7] &quot;10.1177/1363459313501356&quot;        </code></pre>
+</div>
+<p>Wie erwartet, sehen wir einen <em>Vektor</em> mit den importierten DOIs.</p>
+<h2 id="forward-citation-tracking">Forward citation tracking</h2>
+<p>Jetzt möchten wir alle Artikel aus COCI auffindbar machen, welche unsere Studien bzw. DOIs zitieren. In COCI sind aktuell ca. 450 Millionen Zitate aus über 46 Millionen Artikeln indexiert <em>(Stand 09/2019)</em>. Diese Zitationsdaten stammen aus den öffentlichen <em>Crossref DOI-to-DOI Referenzen</em>.<br />
+Die für das Beispiel notwendigen Funktionen – <code>oc_coci_cites()</code> und <code>oci_coci_refs()</code> – aus dem <code>citecorp</code>-Paketen nehmen in der aktuellen Version leider <strong>keine</strong> <em>Vektoren</em> als Argument. Daher brauchen wir einen Befehl aus der guten alten <code>apply</code>-Familie, um die jeweiligen Funktion bei allen DOIs durchzuführen.<br />
+Funktion <code>oc_coci_cites()</code> wird mit <code>sapply()</code> bei allen Werten in der Spalte <code>DOI</code> durchgeführt und die Ergebnisse in Objekt namens <code>cites</code> gespeichert:</p>
+<div class="layout-chunk" data-layout="l-body">
+<pre class="r"><code>
+cites &lt;- sapply(seq_len(nrow(studien)),
+                function(i){oc_coci_cites(studien$DOI[i])}
+                )
+
+# Das Ergebnis ist eine Liste von data frames, binden wir sie zusammen:
+cites &lt;- bind_rows(cites)
+
+# Generierte Daten anschauen:
+cites</code></pre>
+<pre><code>
+# A tibble: 91 x 7
+   oci          timespan citing    creation author_sc journal_sc cited
+   &lt;chr&gt;        &lt;chr&gt;    &lt;chr&gt;     &lt;chr&gt;    &lt;chr&gt;     &lt;chr&gt;      &lt;chr&gt;
+ 1 02001010101… P5Y      10.1111/… 2007-05  no        no         10.1…
+ 2 02001010101… P9Y      10.1111/… 2011-09… no        no         10.1…
+ 3 02001010101… P11Y     10.1111/… 2013-09… no        no         10.1…
+ 4 02001010102… P10Y     10.11124… 2012     no        no         10.1…
+ 5 02001010102… P11Y     10.11124… 2013-05  no        no         10.1…
+ 6 02001010707… P13Y     10.1177/… 2015-01… no        no         10.1…
+ 7 02001010707… P5Y      10.1177/… 2007-10  no        no         10.1…
+ 8 02001010806… P13Y     10.1186/… 2015-03… no        no         10.1…
+ 9 02004000405… P11Y     10.4045/… 2013     no        no         10.1…
+10 02001010707… P14Y     10.1177/… 2016-07… no        no         10.1…
+# … with 81 more rows</code></pre>
+</div>
+<p>Sieht erst mal nicht schlecht aus! Ich werde an dieser Stelle den Inhalt der Daten nicht näher beschreiben, da wir auch hier eigentlich nur die DOIs der Studien für dieses Beispiel brauchen. Die <strong>für uns relevanten</strong> DOIs befinden sich in der Spalte <code>citing</code>.</p>
+<aside>
+Weitere Informationen über die angezeigten Daten sind auf der <a href="https://opencitations.net/index/coci">Webseite von COCI</a> zu finden.
+</aside>
+<h2 id="backward-citation-tracking">Backward citation tracking</h2>
+<p>Nun müssen wir lediglich alles noch mal wiederholen, aber in die “andere Richtung”. Das geht einfach mit der Funktion <code>oc_coci_refs()</code>. Wir müssen dafür nur die Funktion und den Namen des zu generienden Objektes in unserem Code ändern:</p>
+<div class="layout-chunk" data-layout="l-body">
+<pre class="r"><code>
+refs &lt;- sapply(seq_len(nrow(studien)),
+               function(i){oc_coci_refs(studien$DOI[i])}
+               )
+refs &lt;- bind_rows(refs)
+refs</code></pre>
+<pre><code>
+# A tibble: 113 x 7
+   oci         timespan citing creation author_sc journal_sc cited    
+   &lt;chr&gt;       &lt;chr&gt;    &lt;chr&gt;  &lt;chr&gt;    &lt;chr&gt;     &lt;chr&gt;      &lt;chr&gt;    
+ 1 0200100000… P14Y     10.10… 2002     no        no         10.1001/…
+ 2 0200100000… P1Y      10.10… 2002     no        yes        10.1002/…
+ 3 0200100000… P8Y      10.10… 2002     no        yes        10.1002/…
+ 4 0200100000… P10Y     10.10… 2002     no        no         10.1007/…
+ 5 0200100000… P0Y      10.10… 2002     no        no         10.1016/…
+ 6 0200100000… P8Y      10.10… 2002     no        no         10.1016/…
+ 7 0200100000… P5Y      10.10… 2002     no        no         10.1016/…
+ 8 0200100000… P21Y     10.10… 2002     no        no         10.1017/…
+ 9 0200100000… P10Y     10.10… 2002     no        no         10.1017/…
+10 0200100000… P7Y      10.10… 2002     no        no         10.1046/…
+# … with 103 more rows</code></pre>
+</div>
+<p>Obwohl das erzeugte <em>data frame</em> fast identisch zu <code>cites</code> aussieht, muss hierbei berücksichtigt werden, dass sich die für uns relevanten DOIs <strong>nicht</strong> mehr in der <code>citing</code>, sondern in der <code>cited</code>-Spalte befinden.</p>
+<h2 id="duplikate-entfernen">Duplikate entfernen</h2>
+<p>Da alle im ersten Schritt importierten Studien aus dem gleichen Themengebiet kommen, ist der Verdacht nah, dass wir nun einige Duplikate bei den Zitaten haben. Ein Artikel kann mehrere unserer importierten Studien zitieren oder andersherum. Diese Duplikaten könnten wir natürlich auch später in einem Literaturverwaltungsprogramm entfernen, aber es ist auch an dieser Stelle mit wenigen Code-Zeilen möglich — mit einer 100-prozentigen Treffsicherheit:</p>
+<div class="layout-chunk" data-layout="l-body">
+<pre class="r"><code>
+# Erst führen wie die DOIs beider Objekte zusammen:
+cites_u_refs &lt;- tibble(doi = c(cites$citing, refs$cited))
+
+# Schauen wir uns die Daten an:
+cites_u_refs</code></pre>
+<pre><code>
+# A tibble: 204 x 1
+   doi                              
+   &lt;chr&gt;                            
+ 1 10.1111/j.1365-2702.2006.01806.x 
+ 2 10.1111/j.1365-2702.2011.03849.x 
+ 3 10.1111/j.1365-2702.2012.04102.x 
+ 4 10.11124/01938924-201210561-00001
+ 5 10.11124/01938924-201311050-00003
+ 6 10.1177/1049732314568321         
+ 7 10.1177/0269216307081129         
+ 8 10.1186/s12912-015-0069-7        
+ 9 10.4045/tidsskr.13.0202          
+10 10.1177/1054773815601392         
+# … with 194 more rows</code></pre>
+<pre class="r"><code>
+# ...und entfernen DOIs, wenn mehrfach vorkommen:
+cites_u_refs &lt;- cites_u_refs[!duplicated(cites_u_refs$doi),]
+
+# Jetzt sollen wir einige Zeilen weniger haben:
+cites_u_refs</code></pre>
+<pre><code>
+# A tibble: 178 x 1
+   doi                              
+   &lt;chr&gt;                            
+ 1 10.1111/j.1365-2702.2006.01806.x 
+ 2 10.1111/j.1365-2702.2011.03849.x 
+ 3 10.1111/j.1365-2702.2012.04102.x 
+ 4 10.11124/01938924-201210561-00001
+ 5 10.11124/01938924-201311050-00003
+ 6 10.1177/1049732314568321         
+ 7 10.1177/0269216307081129         
+ 8 10.1186/s12912-015-0069-7        
+ 9 10.4045/tidsskr.13.0202          
+10 10.1177/1054773815601392         
+# … with 168 more rows</code></pre>
+</div>
+<p>Und hier haben wir sie schon: die DOIs von allen in COCI indexierten Artikeln, welche unsere importierten Studien bzw. DOIs zitiert haben sowie alle Referenzen, die in unseren Studien zitiert wurden. Damit ist unser automatisiertes <em>refences searching</em> erst mal abgeschlossen!</p>
+<h2 id="ergebnisse-in-eine-datei-schreiben">Ergebnisse in eine Datei schreiben</h2>
+<p>Jetzt haben wir also drei neue Objekte generiert: <code>cites</code>, <code>refs</code> und <code>cites_u_refs</code>. Die ersten zwei dienen als Dokumentation, das letzte beeinhaltet die DOIs, die wir für die weitere Bearbeitung brauchen. Als nächstes müssen wir diese extrahierten DOIs in eine neue Datei — in diesem Beispiel in eine <code>.txt</code>-Datei — schreiben, welche wir dann in das Literaturverwaltungsprogramm unseres Vertrauens importieren können, um die kompletten bibliographischen Daten bzw. die Abstracts herunterzuladen. Danach können wir die Artikel z.B. mit <a href="https://rayyan.qcri.org/">Rayyan</a> screenen und damit die Entscheidungen dokumentieren.</p>
+<div class="layout-chunk" data-layout="l-body">
+<pre class="r"><code>
+# Für die Dokumentation:
+write_csv(cites, &quot;cites.csv&quot;, quote = FALSE)
+write_csv(refs, &quot;refs.csv&quot;, quote = FALSE)
+
+# Für das Importieren in Literaturverwaltungsprogramm:
+write(cites_u_refs$doi, &quot;cites_u_refs.txt&quot;)</code></pre>
+</div>
+<h2 id="umgang-mit-fehlenden-daten">Umgang mit fehlenden Daten</h2>
+<p>Was ist aber mit den Studien, welche <em>keine</em> Einträge in OpenCitations-Datenbank haben? Die müssten wir leider altmodisch — sprich manuell — oder mit Hilfe anderer Online-Ressourcen durchsuchen. Das können wir mit freundlicher Unterstützung von <code>dplyr</code>-Paketen — das bereits durch <code>tidyverse</code>-Library geladen wurde — etwas erleichtern, indem wir eine Tabelle mit den fehlenden Einträgen generieren. Zum Teil können sie sich dabei auch nicht nur um fehlende, sondern wirklich nicht-existierende Daten handeln (z.B. der Artikel wurde einfach nie zitiert). Auch in dem Fall sollten diese Einträge manuell kontrolliert werden, um Fehler zu vermeiden.<br />
+Erst müssen wir uns die Metadaten für alle importierten Studien mit der Funktion <code>oc_coci_meta()</code> herunterladen. Das geht sehr einfach, weil — im Gegensatz zu den anderen bereits verwendeten Funktionen — <code>oc_coci_meta()</code> einen <em>Vektor</em> als Argument akzeptiert:</p>
+<div class="layout-chunk" data-layout="l-body">
+<pre class="r"><code>
+# Nicht erschrecken: das kann kann sogar einige Minuten dauern:
+metadata &lt;- oc_coci_meta(studien$DOI)</code></pre>
+</div>
+<br />
+
+<div class="layout-chunk" data-layout="l-body">
+<pre class="r"><code>
+# Schauen wir die Daten an:
+metadata</code></pre>
+<pre><code>
+# A tibble: 7 x 13
+  reference source_id volume title author source_title oa_link
+* &lt;chr&gt;     &lt;chr&gt;     &lt;chr&gt;  &lt;chr&gt; &lt;chr&gt;  &lt;chr&gt;        &lt;chr&gt;  
+1 10.1016/… issn:136… 18     ‘A P… Flynn… Health: An … &quot;&quot;     
+2 10.1001/… issn:088… 17     The … Ander… Internation… &quot;&quot;     
+3 &quot;&quot;        issn:082… 25     Deli… Cohen… Journal Of … &quot;&quot;     
+4 10.1002/… issn:135… 9      Temp… Fager… Journal Of … &quot;&quot;     
+5 &quot;&quot;        issn:096… 15     Acut… Granb… Intensive A… &quot;&quot;     
+6 &quot;&quot;        issn:002… 39     Acut… Ander… Internation… &quot;&quot;     
+7 10.1001/… issn:147… 14     Expe… Claes… Bmc Nursing  https:…
+# … with 6 more variables: citation &lt;chr&gt;, page &lt;chr&gt;,
+#   citation_count &lt;chr&gt;, issue &lt;chr&gt;, year &lt;chr&gt;, doi &lt;chr&gt;</code></pre>
+<pre class="r"><code>
+# Nur einige relevante Spalten wg. Lesbarkeit auswählen:
+metadata %&gt;% select(author, year, title, reference, citation)</code></pre>
+<pre><code>
+# A tibble: 7 x 5
+  author         year  title          reference        citation       
+* &lt;chr&gt;          &lt;chr&gt; &lt;chr&gt;          &lt;chr&gt;            &lt;chr&gt;          
+1 Flynn, Katy; … 2013  ‘A Post-Trans… 10.1016/j.jpain… 10.1111/jocn.1…
+2 Andersson, Ed… 2002  The Meaning O… 10.1001/jama.19… 10.1111/j.1365…
+3 Cohen, Marlen… 2009  Delirium In A… &quot;&quot;               &quot;&quot;             
+4 Fagerberg, I.… 2002  Temporary Con… 10.1002/j.2048-… 10.1111/j.1365…
+5 Granberg, Ane… 1999  Acute Confusi… &quot;&quot;               10.1111/j.1365…
+6 Andersson, Ed… 2002  Acute Confusi… &quot;&quot;               10.1111/j.1365…
+7 Claesson Ling… 2015  Experiences O… 10.1001/jama.20… 10.5812/ccn.63…</code></pre>
+</div>
+<p>Hier sehen wir, dass es bei einigen Studien die Spalten <code>reference</code> und <code>citation</code> leer geblieben sind (<code>""</code>). Es gab also an diesen Stellen gar keine Einträge in COCI. Das möchten wir uns auf jeden Fall näher anschauen und generieren daher eine Tabelle mit den Studien:</p>
+<div class="layout-chunk" data-layout="l-body">
+<pre class="r"><code>
+# Filtern wir daraus nur die, bei denen etwas fehlt:
+manual &lt;- metadata %&gt;%
+  filter(reference == &quot;&quot; | citation == &quot;&quot;) %&gt;%
+  # Eine neue Spalte, die uns die fehlende &quot;Richtung&quot; sagt:
+  mutate(missing = if_else(reference == &quot;&quot; &amp; citation == &quot;&quot;, &quot;both&quot;,
+                   if_else(reference == &quot;&quot;, &quot;backward&quot;, &quot;forward&quot;))) %&gt;%
+  # Für bessere Lesbarkeit:
+  select(Missing = missing, Author = author, Year = year, Title = title,
+         Journal = source_title, Vol. = volume, DOI = doi)
+
+# Daten anschauen:
+manual</code></pre>
+<pre><code>
+# A tibble: 3 x 7
+  Missing  Author         Year  Title        Journal     Vol.  DOI    
+  &lt;chr&gt;    &lt;chr&gt;          &lt;chr&gt; &lt;chr&gt;        &lt;chr&gt;       &lt;chr&gt; &lt;chr&gt;  
+1 both     Cohen, Marlen… 2009  Delirium In… Journal Of… 25    10.117…
+2 backward Granberg, Ane… 1999  Acute Confu… Intensive … 15    10.101…
+3 backward Andersson, Ed… 2002  Acute Confu… Internatio… 39    10.101…</code></pre>
+<pre class="r"><code>
+# Export in eine csv-Tabelle:
+write_csv(manual, &quot;manual.csv&quot;, quote = FALSE)</code></pre>
+</div>
+<br />
+
+<div class="layout-chunk" data-layout="l-body">
+<div style="border: 1px solid #ddd; padding: 5px; overflow-x: scroll; width:100%; ">
+<table class="table" style="margin-left: auto; margin-right: auto;">
+<caption>
+<span id="tab:unnamed-chunk-12">Table 1: </span>Inhalt der Datei ‘manual.csv’
+</caption>
+<thead>
+<tr>
+<th style="text-align:left;">
+Missing
+</th>
+<th style="text-align:left;">
+Author
+</th>
+<th style="text-align:left;">
+Year
+</th>
+<th style="text-align:left;">
+Title
+</th>
+<th style="text-align:left;">
+Journal
+</th>
+<th style="text-align:left;">
+Vol.
+</th>
+<th style="text-align:left;">
+DOI
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+both
+</td>
+<td style="text-align:left;">
+Cohen, Marlene Z.; Pace, Ellen A.; Kaur, Guddi; Bruera, Eduardo
+</td>
+<td style="text-align:left;">
+2009
+</td>
+<td style="text-align:left;">
+Delirium In Advanced Cancer Leading To Distress In Patients And Family Caregivers
+</td>
+<td style="text-align:left;">
+Journal Of Palliative Care
+</td>
+<td style="text-align:left;">
+25
+</td>
+<td style="text-align:left;">
+10.1177/082585970902500303
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+backward
+</td>
+<td style="text-align:left;">
+Granberg, Anetth; Bergborn Engberg, Ingegerd; Lundberg, Dag
+</td>
+<td style="text-align:left;">
+1999
+</td>
+<td style="text-align:left;">
+Acute Confusion And Unreal Experiences In Intensive Care Patients In Relation To The Icu Syndrome. Part Ii
+</td>
+<td style="text-align:left;">
+Intensive And Critical Care Nursing
+</td>
+<td style="text-align:left;">
+15
+</td>
+<td style="text-align:left;">
+10.1016/s0964-3397(99)80062-7
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+backward
+</td>
+<td style="text-align:left;">
+Andersson, Edith M; Norberg, Astrid; Hallberg, Ingalill R
+</td>
+<td style="text-align:left;">
+2002
+</td>
+<td style="text-align:left;">
+Acute Confusional Episodes In Elderly Orthopaedic Patients: The Patients’ Actions And Speech
+</td>
+<td style="text-align:left;">
+International Journal Of Nursing Studies
+</td>
+<td style="text-align:left;">
+39
+</td>
+<td style="text-align:left;">
+10.1016/s0020-7489(01)00022-0
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p>Nun sollen wir ingesamt vier Dateien generiert haben — <code>refs.txt</code>, <code>cites.txt</code>, <code>refs_u_cites.csv</code> und <code>manual.csv</code><a href="#fn2" class="footnote-ref" id="fnref2"><sup>2</sup></a> — mit denen wir gut in anderen Programmen weiterarbeiten können. Selbstverständlich wären auch weitere Formate beim Exportieren möglich gewesen. Ausgerechnet diese habe ich für das Beispiel ausgewählt, da ich persönlich gerne nur die DOIs importiere und dann Zotero die Metadaten herunterladen lasse.</p>
+<h1 id="fazit">Fazit</h1>
+<p>In diesem Text wurde eine Möglichkeit zum automatisierten <em>forward and backward searching</em> mittels R und mit Paketen aus der <a href="https://ropensci.org/">rOpenSci Initiative</a> vorgestellt. Auch weitere Schritte könnten mit R übernommen und automatisiert werden (z.B. das generieren von <code>BibTex</code>-Datein aus den Ergebnissen mit der Funktion <code>rcrossref:::cr_cn</code><span class="citation" data-cites="rcrossref2019">(Chamberlain et al. <a href="#ref-rcrossref2019">2019</a>)</span> oder das Herunterladen von Abstracts mit <code>fulltext:::ft_abstract()</code><span class="citation" data-cites="fulltext2019">(Chamberlain <a href="#ref-fulltext2019">2019</a><a href="#ref-fulltext2019">b</a>)</span>). Darüber hinaus bieten die Zitationsdaten auch interessante Möglichkeiten zur graphischen Darstellung der bibliographischen Netzwerken bzw. Verbindungen zwischen den Artikeln, Autoren und Journals innerhalb eines Fachgebietes bzw. Themenbereiches<span class="citation" data-cites="tyner2017">(Tyner, Briatte, and Hoffmann <a href="#ref-tyner2017">2017</a>)</span>.<br />
+Das beschriebene Vorgehen ersetzt natürlich nicht komplett die manuelle Suche. Es ist z.B. weiterhin notwendig die <em>backwards references</em> per Hand zu kontrollieren, da nicht alle — insbesonderes ältere — Zitate elektronisch erfasst werden können. Bei der <em>forward searching</em> können jedoch viel Zeit und Ressourcen mit diesem Vorgehen geschont werden. Die Voraussetzung dafür ist jedoch, dass die Studien relativ neu sind und einen indexierten DOI haben. Ein weiterer Vorteil ist, dass die Suche im Vergleich zu den per Hand durchgeführten Methoden nachvollziehbar und stets gut dokumentiert stattfindet; jeder einzelne Arbeitsschritt kann dank eines klaren <em>Audit-Trails</em> überprüft und bei Bedarf reproduziert werden.<br />
+</p>
+<div id="refs" class="references">
+<div id="ref-atkinson2015">
+<p>Atkinson, Kayla M., Alison C. Koenka, Carmen E. Sanchez, Hannah Moshontz, and Harris Cooper. 2015. “Reporting Standards for Literature Searches and Report Inclusion Criteria: Making Research Syntheses More Transparent and Easy to Replicate.” <em>Research Synthesis Methods</em> 6 (1): 87–95. <a href="https://doi.org/10.1002/jrsm.1127">https://doi.org/10.1002/jrsm.1127</a>.</p>
+</div>
+<div id="ref-citecorp2019">
+<p>Chamberlain, Scott. 2019a. <em>Citecorp: Client for the Open Citations Corpus</em>. <a href="https://CRAN.R-project.org/package=citecorp">https://CRAN.R-project.org/package=citecorp</a>.</p>
+</div>
+<div id="ref-fulltext2019">
+<p>———. 2019b. <em>Fulltext: Full Text of ’Scholarly’ Articles Across Many Data Sources</em>. <a href="https://CRAN.R-project.org/package=fulltext">https://CRAN.R-project.org/package=fulltext</a>.</p>
+</div>
+<div id="ref-rcrossref2019">
+<p>Chamberlain, Scott, Hao Zhu, Najko Jahn, Carl Boettiger, and Karthik Ram. 2019. <em>Rcrossref: Client for Various ’Crossref’ ’Apis’</em>. <a href="https://CRAN.R-project.org/package=rcrossref">https://CRAN.R-project.org/package=rcrossref</a>.</p>
+</div>
+<div id="ref-bib2df2019">
+<p>Ottolinger, Philipp. 2019. <em>Bib2df: Parse a Bibtex File to a Data Frame</em>. <a href="https://CRAN.R-project.org/package=bib2df">https://CRAN.R-project.org/package=bib2df</a>.</p>
+</div>
+<div id="ref-tyner2017">
+<p>Tyner, Sam, François Briatte, and Heike Hoffmann. 2017. “Network Visualization with Ggplot2.” <em>The R Journal</em> 9 (1): 27–59.</p>
+</div>
+</div>
+<section class="footnotes">
+<hr />
+<ol>
+<li id="fn1"><p>Die Datei ist im <a href="https://github.com/Eerokg/eerokg.github.io/tree/master/files/">GitHub Repository</a> von diesem Artikel verfügbar.<a href="#fnref1" class="footnote-back">↩</a></p></li>
+<li id="fn2"><p>Alle generierten Dateien sind im <a href="https://github.com/Eerokg/eerokg.github.io/tree/master/_posts/2019-09-23-references-searching-mit-r">GitHub Repository</a> von diesem Artikel verfügbar.<a href="#fnref2" class="footnote-back">↩</a></p></li>
+</ol>
+</section>
+<!--radix_placeholder_article_footer-->
+<div class="article-footer">
+  <p class="social_footer">
+    <span class="article-sharing">
+      Share: &nbsp;
+      <a href="https://twitter.com/share?text=Eine%20Methode%20f%C3%BCr%20reference%20searching%20mit%20R%20und%20citecorp&amp;url=https%3A%2F%2Fblog.kuusisto.de%2Fposts%2F2019-09-25-references-searching-mit-r%2F">
+        <i class="fab fa-twitter"></i>
+      </a>
+      <a href="https://www.linkedin.com/shareArticle?mini=true&amp;url=https%3A%2F%2Fblog.kuusisto.de%2Fposts%2F2019-09-25-references-searching-mit-r%2F&amp;title=Eine%20Methode%20f%C3%BCr%20reference%20searching%20mit%20R%20und%20citecorp">
+        <i class="fab fa-linkedin"></i>
+      </a>
+      <a href="https://www.facebook.com/sharer/sharer.php?s=100&amp;p[url]=https%3A%2F%2Fblog.kuusisto.de%2Fposts%2F2019-09-25-references-searching-mit-r%2F">
+        <i class="fab fa-facebook"></i>
+      </a>
+    </span>
+  </p>
+</div>
+<!--/radix_placeholder_article_footer-->
+</div>
+
+<div class="d-appendix">
+</div>
+
+
+<!--radix_placeholder_site_after_body-->
+<!--/radix_placeholder_site_after_body-->
+<!--radix_placeholder_appendices-->
+<div class="appendix-bottom">
+  <h3 id="updates-and-corrections">Corrections</h3>
+  <p>If you see mistakes or want to suggest changes, please <a href="https://github.com/eerokg/eerokg.github.io/issues/new">create an issue</a> on the source repository.</p>
+  <h3 id="citation">Citation</h3>
+  <p>For attribution, please cite this work as</p>
+  <pre class="citation-appendix short">Kuusisto-Gussmann (2019, Sept. 25). kuusisto.de: Eine Methode für reference searching mit R und citecorp. Retrieved from https://blog.kuusisto.de/posts/2019-09-25-references-searching-mit-r/</pre>
+  <p>BibTeX citation</p>
+  <pre class="citation-appendix long">@misc{kuusisto-gussmann2019eine,
+  author = {Kuusisto-Gussmann, Eero},
+  title = {kuusisto.de: Eine Methode für reference searching mit R und citecorp},
+  url = {https://blog.kuusisto.de/posts/2019-09-25-references-searching-mit-r/},
+  year = {2019}
+}</pre>
+</div>
+<script id="distill-bibliography" type="text/bibtex">
+
+@article{atkinson2015,
+  title = {Reporting Standards for Literature Searches and Report Inclusion Criteria: Making Research Syntheses More Transparent and Easy to Replicate},
+  volume = {6},
+  copyright = {Copyright \textcopyright{} 2014 John Wiley \& Sons, Ltd.},
+  shorttitle = {Reporting Standards for Literature Searches and Report Inclusion Criteria},
+  language = {en},
+  number = {1},
+  journal = {Research Synthesis Methods},
+  doi = {10.1002/jrsm.1127},
+  author = {Atkinson, Kayla M. and Koenka, Alison C. and Sanchez, Carmen E. and Moshontz, Hannah and Cooper, Harris},
+  year = {2015},
+  keywords = {guidelines,literature search,meta-analysis,research synthesis},
+  pages = {87-95}
+}
+
+@article{tyner2017,
+  title = {Network Visualization with ggplot2},
+  volume = {9},
+  language = {en},
+  number = {1},
+  journal = {The R Journal},
+  author = {Tyner, Sam and Briatte, François and Hoffmann, Heike},
+  year = {2017},
+  keywords = {guidelines,literature search,meta-analysis,research synthesis},
+  pages = {27-59}
+}
+
+@Manual{citecorp2019,
+    title = {citecorp: Client for the Open Citations Corpus},
+    author = {Scott Chamberlain},
+    year = {2019},
+    note = {R package version 0.1.0},
+    url = {https://CRAN.R-project.org/package=citecorp},
+  }
+
+@Manual{bib2df2019,
+    title = {bib2df: Parse a BibTeX File to a Data Frame},
+    author = {Philipp Ottolinger},
+    year = {2019},
+    note = {R package version 1.1.1},
+    url = {https://CRAN.R-project.org/package=bib2df},
+  }
+  
+@Manual{rcrossref2019,
+    title = {rcrossref: Client for Various 'CrossRef' 'APIs'},
+    author = {Scott Chamberlain and Hao Zhu and Najko Jahn and Carl Boettiger and Karthik Ram},
+    year = {2019},
+    note = {R package version 0.9.2},
+    url = {https://CRAN.R-project.org/package=rcrossref},
+  }
+    
+@Manual{fulltext2019,
+    title = {fulltext: Full Text of 'Scholarly' Articles Across Many Data Sources},
+    author = {Scott Chamberlain},
+    year = {2019},
+    note = {R package version 1.3.0},
+    url = {https://CRAN.R-project.org/package=fulltext},
+  }
+</script>
+<!--/radix_placeholder_appendices-->
+<!--radix_placeholder_navigation_after_body-->
+<div class="distill-site-nav distill-site-footer">
+  <p>
+    <a href="https://twitter.com/eerok" class="icon-link">
+      <span class="fa fa-twitter"/>
+    </a>
+    <a href="https://www.xing.com/profile/Eero_KuusistoGussmann/" class="icon-link">
+      <span class="fa fa-xing"/>
+    </a>
+    <a href="https://www.linkedin.com/in/eero-kuusisto-gussmann/" class="icon-link">
+      <span class="fa fa-linkedin"/>
+    </a>
+    <a href="https://github.com/Eerokg/" class="icon-link">
+      <span class="fa fa-github"/>
+    </a>
+  </p>
+  <p>© Copyright 2019 – Eero Kuusisto-Gussmann – <a href="https://creativecommons.org/licenses/by/3.0/de/">CC-BY-3.0-DE</a></p>
+  <p>Powered by <a href="https://rstudio.github.io/distill/">Distill for R Markdown</a> &amp; <a href="https://pages.github.com">GitHub Pages</a></p>
+</div>
+<!--/radix_placeholder_navigation_after_body-->
+
+
+</body>
+
+</html>

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd" version="1.0">
+  <url>
+    <loc>https://blog.kuusisto.de/about.html</loc>
+    <lastmod>2019-09-23T23:53:10+02:00</lastmod>
+  </url>
+  <url>
+    <loc>https://blog.kuusisto.de/</loc>
+    <lastmod>2019-09-25T19:46:13+02:00</lastmod>
+  </url>
+  <url>
+    <loc>https://blog.kuusisto.de/posts/2019-09-25-references-searching-mit-r/</loc>
+    <lastmod>2019-09-25T21:06:15+02:00</lastmod>
+  </url>
+  <url>
+    <loc>https://blog.kuusisto.de/posts/2019-09-21-pflege-von-hirntumorpatienten/</loc>
+    <lastmod>2019-09-24T12:58:05+02:00</lastmod>
+  </url>
+</urlset>

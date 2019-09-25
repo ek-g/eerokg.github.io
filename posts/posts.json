@@ -1,0 +1,42 @@
+[
+  {
+    "path": "posts/2019-09-25-references-searching-mit-r/",
+    "title": "Eine Methode für reference searching mit R und citecorp",
+    "description": "In diesem Artikel wird ein Arbeitsablauf mit R und citecorp dargestellt, um forward and backward references searching zu erleichtern.",
+    "author": [
+      {
+        "name": "Eero Kuusisto-Gussmann",
+        "url": {}
+      }
+    ],
+    "date": "2019-09-25",
+    "categories": [
+      "R",
+      "Literatursuche",
+      "German"
+    ],
+    "preview": "posts/2019-09-25-references-searching-mit-r/preview.jpg",
+    "last_modified": "2019-09-25T21:06:15+02:00"
+  },
+  {
+    "path": "posts/2019-09-21-pflege-von-hirntumorpatienten/",
+    "title": "Neuer Artikel: Pflege von Hirntumorpatienten - Komplikationen rechzeitig erkennen",
+    "description": "Der Artikel in der Zeitschrift \"Onkologische Pflege\" ist kostenlos verfügbar.",
+    "author": [
+      {
+        "name": "Eero Kuusisto-Gussmann",
+        "url": {}
+      }
+    ],
+    "date": "2019-09-21",
+    "categories": [
+      "Neuroonkologie",
+      "Pflege",
+      "German"
+    ],
+    "preview": "posts/2019-09-21-pflege-von-hirntumorpatienten/preview.png",
+    "last_modified": "2019-09-24T12:58:05+02:00",
+    "preview_width": 1200,
+    "preview_height": 928
+  }
+]

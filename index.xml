@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss xmlns:atom="http://www.w3.org/2005/Atom" xmlns:media="http://search.yahoo.com/mrss/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:dc="http://purl.org/dc/elements/1.1/" version="2.0">
+  <channel>
+    <title>kuusisto.de</title>
+    <link>https://blog.kuusisto.de/</link>
+    <atom:link href="https://blog.kuusisto.de/index.xml" rel="self" type="application/rss+xml"/>
+    <description>Die persönliche Webseite von Eero Kuusisto-Gussmann
+</description>
+    <generator>Distill</generator>
+    <lastBuildDate>Mi, 25 Sep 2019 00:00:00 +0000</lastBuildDate>
+    <item>
+      <title>Eine Methode für reference searching mit R und citecorp</title>
+      <dc:creator>Eero Kuusisto-Gussmann</dc:creator>
+      <link>https://blog.kuusisto.de/posts/2019-09-25-references-searching-mit-r</link>
+      <description>In diesem Artikel wird ein Arbeitsablauf mit R und citecorp dargestellt, um forward and backward references searching zu erleichtern.</description>
+      <guid>https://blog.kuusisto.de/posts/2019-09-25-references-searching-mit-r</guid>
+      <pubDate>Mi, 25 Sep 2019 00:00:00 +0000</pubDate>
+      <media:content url="https://blog.kuusisto.de/posts/2019-09-25-references-searching-mit-r/preview.jpg" medium="image" type="image/jpeg"/>
+    </item>
+    <item>
+      <title>Neuer Artikel: Pflege von Hirntumorpatienten - Komplikationen rechzeitig erkennen</title>
+      <dc:creator>Eero Kuusisto-Gussmann</dc:creator>
+      <link>https://blog.kuusisto.de/posts/2019-09-21-pflege-von-hirntumorpatienten</link>
+      <description>Der Artikel in der Zeitschrift "Onkologische Pflege" ist kostenlos verfügbar.</description>
+      <guid>https://blog.kuusisto.de/posts/2019-09-21-pflege-von-hirntumorpatienten</guid>
+      <pubDate>Sa, 21 Sep 2019 00:00:00 +0000</pubDate>
+      <media:content url="https://blog.kuusisto.de/posts/2019-09-21-pflege-von-hirntumorpatienten/preview.png" medium="image" type="image/png" width="1200" height="928"/>
+    </item>
+  </channel>
+</rss>
