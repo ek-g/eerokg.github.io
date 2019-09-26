@@ -1,8 +1,8 @@
 [
   {
     "path": "posts/2019-09-25-references-searching-mit-r/",
-    "title": "Eine Methode für reference searching mit R und citecorp",
-    "description": "In diesem Artikel wird ein Arbeitsablauf mit R und citecorp dargestellt, um forward and backward references searching zu erleichtern.",
+    "title": "Eine Methode für 'reference searching' mit R und citecorp",
+    "description": "In diesem Text wird ein Arbeitsablauf mit R und citecorp dargestellt, um das 'forward and backward references searching' zu erleichtern.",
     "author": [
       {
         "name": "Eero Kuusisto-Gussmann",
@@ -16,7 +16,7 @@
       "German"
     ],
     "preview": "posts/2019-09-25-references-searching-mit-r/preview.jpg",
-    "last_modified": "2019-09-25T21:06:15+02:00"
+    "last_modified": "2019-09-26T19:05:34+02:00"
   },
   {
     "path": "posts/2019-09-21-pflege-von-hirntumorpatienten/",
