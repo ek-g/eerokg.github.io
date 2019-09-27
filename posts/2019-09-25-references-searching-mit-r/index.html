@@ -1517,7 +1517,7 @@ refs</code></pre>
 </div>
 <p>Obwohl das erzeugte <em>data frame</em> fast identisch zu <code>cites</code> aussieht, muss hierbei berücksichtigt werden, dass sich die für uns relevanten DOIs <strong>nicht</strong> mehr in der <code>citing</code>, sondern in der <code>cited</code>-Spalte befinden.</p>
 <h2 id="duplikate-entfernen">Duplikate entfernen</h2>
-<p>Da alle im ersten Schritt importierten Studien aus dem gleichen Themengebiet kommen, ist der Verdacht nah, dass wir nun einige Duplikate bei den Zitaten haben. Ein Artikel kann mehrere unserer importierten Studien zitieren oder andersherum. Diese Duplikaten könnten wir natürlich auch später in einem Literaturverwaltungsprogramm entfernen, aber es ist auch an dieser Stelle mit wenigen Code-Zeilen möglich — mit einer 100-prozentigen Treffsicherheit:</p>
+<p>Da alle im ersten Schritt importierten Studien aus dem gleichen Themengebiet kommen, liegt der Verdacht nah, dass wir nun einige Duplikate bei den Zitaten haben. Ein Artikel kann mehrere unserer importierten Studien zitieren oder andersherum. Diese Duplikaten könnten wir natürlich auch später in einem Literaturverwaltungsprogramm entfernen, aber es ist auch an dieser Stelle mit wenigen Code-Zeilen möglich — mit einer 100-prozentigen Treffsicherheit:</p>
 <div class="layout-chunk" data-layout="l-body">
 <pre class="r"><code>
 # Erst führen wie die DOIs beider Objekte zusammen:
