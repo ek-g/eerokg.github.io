@@ -3,8 +3,3 @@ title: "Posts"
 site: distill::distill_website
 listing: posts
 ---
-
-
-### Willkommen!
-
-<font size="2">In diesem Blog werden Beiträge, Präsentationen und weitere Texte aus meinem professionellen Leben gepostet.</font>
