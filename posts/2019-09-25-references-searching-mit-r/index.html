@@ -1457,8 +1457,8 @@ studien$DOI</code></pre>
 <p>Wie erwartet, sehen wir einen <em>Vektor</em> mit den importierten DOIs.</p>
 <h2 id="forward-citation-tracking">Forward citation tracking</h2>
 <p>Jetzt möchten wir alle Artikel aus COCI auffindbar machen, welche unsere Studien bzw. DOIs zitieren. In COCI sind aktuell ca. 450 Millionen Zitate aus über 46 Millionen Artikeln indexiert <em>(Stand 09/2019)</em>. Diese Zitationsdaten stammen aus den öffentlichen <em>Crossref DOI-to-DOI Referenzen</em>.<br />
-Die für das Beispiel notwendigen Funktionen – <code>oc_coci_cites()</code> und <code>oci_coci_refs()</code> – aus dem <code>citecorp</code>-Paketen nehmen in der aktuellen Version leider <strong>keine</strong> <em>Vektoren</em> als Argument. Daher brauchen wir einen Befehl aus der guten alten <code>apply</code>-Familie, um die jeweiligen Funktion bei allen DOIs durchzuführen.<br />
-Funktion <code>oc_coci_cites()</code> wird mit <code>sapply()</code> bei allen Werten in der Spalte <code>DOI</code> durchgeführt und die Ergebnisse in Objekt namens <code>cites</code> gespeichert:</p>
+Die für das Beispiel notwendigen Funktionen – <code>oc_coci_cites()</code> und <code>oci_coci_refs()</code> – aus dem <code>citecorp</code>-Paketen nehmen in der aktuellen Version leider <strong>keine</strong> <em>Vektoren</em> als Argument. Daher brauchen wir einen Befehl aus der guten alten <code>apply</code>-Familie, um die jeweilige Funktion bei allen DOIs durchzuführen.<br />
+Im Folgenden wird die Funktion <code>oc_coci_cites()</code> mit <code>sapply()</code> bei allen Werten in der Spalte <code>DOI</code> durchgeführt und die Ergebnisse in Objekt namens <code>cites</code> gespeichert:</p>
 <div class="layout-chunk" data-layout="l-body">
 <pre class="r"><code>
 cites &lt;- sapply(seq_len(nrow(studien)),
@@ -1486,7 +1486,7 @@ cites</code></pre>
 10 02001010707… P14Y     10.1177/… 2016-07… no        no         10.1…
 # … with 81 more rows</code></pre>
 </div>
-<p>Sieht erst mal nicht schlecht aus! Ich werde an dieser Stelle den Inhalt der Daten nicht näher beschreiben, da wir auch hier eigentlich nur die DOIs der Studien für dieses Beispiel brauchen. Die <strong>für uns relevanten</strong> DOIs befinden sich in der Spalte <code>citing</code>.</p>
+<p>Sieht erst mal nicht schlecht aus! Ich werde an dieser Stelle den Inhalt der Daten nicht näher beschreiben, da wir auch hier eigentlich nur die DOIs der Studien für dieses Beispiel brauchen. Die <em>für uns relevanten</em> DOIs befinden sich in der Spalte <code>citing</code>.</p>
 <aside>
 Weitere Informationen über die angezeigten Daten sind auf der <a href="https://opencitations.net/index/coci">Webseite von COCI</a> zu finden.
 </aside>
@@ -1517,7 +1517,7 @@ refs</code></pre>
 </div>
 <p>Obwohl das erzeugte <em>data frame</em> fast identisch zu <code>cites</code> aussieht, muss hierbei berücksichtigt werden, dass sich die für uns relevanten DOIs <strong>nicht</strong> mehr in der <code>citing</code>, sondern in der <code>cited</code>-Spalte befinden.</p>
 <h2 id="duplikate-entfernen">Duplikate entfernen</h2>
-<p>Da alle im ersten Schritt importierten Studien aus dem gleichen Themengebiet kommen, liegt der Verdacht nah, dass wir nun einige Duplikate bei den Zitaten haben. Ein Artikel kann mehrere unserer importierten Studien zitieren oder andersherum. Diese Duplikaten könnten wir natürlich auch später in einem Literaturverwaltungsprogramm entfernen, aber es ist auch an dieser Stelle mit wenigen Code-Zeilen möglich — mit einer 100-prozentigen Treffsicherheit:</p>
+<p>Da alle im ersten Schritt importierten Studien aus dem gleichen Themengebiet kommen, liegt der Verdacht nah, dass wir nun einige Duplikate bei den Zitaten haben. Ein Artikel kann mehrere unserer importierten Studien zitieren oder andersherum. Diese Duplikaten könnten wir natürlich auch später in einem Literaturverwaltungsprogramm entfernen, aber es ist auch an dieser Stelle möglich — mit einer 100-prozentigen Treffsicherheit<a href="#fn2" class="footnote-ref" id="fnref2"><sup>2</sup></a>:</p>
 <div class="layout-chunk" data-layout="l-body">
 <pre class="r"><code>
 # Erst führen wie die DOIs beider Objekte zusammen:
@@ -1749,7 +1749,7 @@ International Journal Of Nursing Studies
 </table>
 </div>
 </div>
-<p>Nun sollen wir ingesamt vier Dateien generiert haben — <code>refs.csv</code>, <code>cites.csv</code>, <code>refs_u_cites.txt</code> und <code>manual.csv</code><a href="#fn2" class="footnote-ref" id="fnref2"><sup>2</sup></a> — mit denen wir gut in anderen Programmen weiterarbeiten können. Selbstverständlich sind auch andere Dateiformate beim Exportieren möglich. Ausgerechnet diese habe ich für das Beispiel ausgewählt, da ich gerne nur die DOIs importiere und Zotero die Metadaten herunterladen lasse. Es ist einfach bei Bedarf das Vorgehen dem eigenen Workflow anzupassen und daraus eine eigene Funktion zu machen, um den ganzen Prozess per Knopfdruck mit einer anderen <code>BibTeX</code>-Datei wiederholen zu können.</p>
+<p>Nun sollen wir ingesamt vier Dateien generiert haben — <code>refs.csv</code>, <code>cites.csv</code>, <code>refs_u_cites.txt</code> und <code>manual.csv</code><a href="#fn3" class="footnote-ref" id="fnref3"><sup>3</sup></a> — mit denen wir gut in anderen Programmen weiterarbeiten können. Selbstverständlich sind auch andere Dateiformate beim Exportieren möglich. Ausgerechnet diese habe ich für das Beispiel ausgewählt, da ich gerne nur die DOIs importiere und Zotero die Metadaten herunterladen lasse. Es ist einfach bei Bedarf das Vorgehen dem eigenen Workflow anzupassen und daraus eine eigene Funktion zu machen, um den ganzen Prozess per Knopfdruck mit einer anderen <code>BibTeX</code>-Datei wiederholen zu können.</p>
 <h1 id="fazit">Fazit</h1>
 <p>In diesem Text wurde eine Möglichkeit zum automatisierten <em>forward and backward searching</em> mittels R und mit Paketen aus der <a href="https://ropensci.org/">rOpenSci Initiative</a> vorgestellt. Auch weitere Schritte könnten mit R übernommen und automatisiert werden (z.B. das generieren von <code>BibTeX</code>-Datein aus den Ergebnissen mit der Funktion <code>rcrossref::cr_cn</code><span class="citation" data-cites="rcrossref2019">(Chamberlain et al. <a href="#ref-rcrossref2019">2019</a>)</span> oder das Herunterladen von Abstracts mit <code>fulltext::ft_abstract()</code><span class="citation" data-cites="fulltext2019">(Chamberlain <a href="#ref-fulltext2019">2019</a><a href="#ref-fulltext2019">b</a>)</span>). Darüber hinaus bieten die Zitationsdaten auch interessante Möglichkeiten zur graphischen Darstellung der bibliographischen Netzwerken bzw. Verbindungen zwischen den Artikeln, Autoren und Journals innerhalb eines Fachgebietes bzw. Themenbereiches<span class="citation" data-cites="tyner2017">(Tyner, Briatte, and Hoffmann <a href="#ref-tyner2017">2017</a>)</span>.<br />
 Das beschriebene Vorgehen ersetzt natürlich nicht komplett die manuelle Suche. Es ist z.B. weiterhin notwendig die <em>backwards references</em> per Hand zu kontrollieren, da nicht alle — insbesonderes ältere — Zitate elektronisch erfasst werden können. Bei der <em>forward searching</em> können jedoch viel Zeit und Ressourcen mit diesem Vorgehen geschont werden. Die Voraussetzungen dafür sind, dass die Studien relativ neu sind und einen indexierten DOI haben. Ein weiterer Vorteil ist, dass die Suche im Vergleich zu den per Hand durchgeführten Methoden nachvollziehbar und stets gut dokumentiert stattfindet; jeder einzelne Arbeitsschritt kann dank eines klaren <em>Audit-Trails</em> überprüft und bei Bedarf reproduziert werden.<br />
@@ -1778,7 +1778,8 @@ Das beschriebene Vorgehen ersetzt natürlich nicht komplett die manuelle Suche. 
 <hr />
 <ol>
 <li id="fn1"><p>Die Datei ist im <a href="https://github.com/Eerokg/eerokg.github.io/tree/master/files/">GitHub Repository</a> von diesem Artikel verfügbar.<a href="#fnref1" class="footnote-back">↩</a></p></li>
-<li id="fn2"><p>Alle generierten Dateien sind im <a href="https://github.com/Eerokg/eerokg.github.io/tree/master/_posts/2019-09-23-references-searching-mit-r">GitHub Repository</a> von diesem Artikel verfügbar.<a href="#fnref2" class="footnote-back">↩</a></p></li>
+<li id="fn2"><p>Nachtrag 23.10.19: Es werden hier nur die wirlich <em>identischen</em> DOis entfernt. Die Entfernung ist aber <em>case sensitive</em>. Wenn man also wirklich 100% sicher sein will, sollten alle DOIs erst mit z.B. <code>tolower()</code> in gleiche Form konvertiert werden.<a href="#fnref2" class="footnote-back">↩</a></p></li>
+<li id="fn3"><p>Alle generierten Dateien sind im <a href="https://github.com/Eerokg/eerokg.github.io/tree/master/_posts/2019-09-23-references-searching-mit-r">GitHub Repository</a> von diesem Artikel verfügbar.<a href="#fnref3" class="footnote-back">↩</a></p></li>
 </ol>
 </section>
 <!--radix_placeholder_article_footer-->
