@@ -19,3 +19,4 @@ output:
 collections:
   posts:
     share: [twitter, linkedin, facebook]
+    citations: false
