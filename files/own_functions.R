@@ -4,9 +4,9 @@ library(gdata)
 library(tools)
 library(pdftools)
 
-add_file <- function(file_name, title) {
-  paste("[", title, "](", file_name, ") (", toupper(file_ext(file_name)), ", ",
+add_file <- function(file_name, title, font_size = 2) {
+  paste("[", title, "](", file_name, ") <font size=", font_size, ">(", toupper(file_ext(file_name)), ", ",
         if(file_ext(file_name) == "pdf"){
         paste(pdf_info(file_name)[2], "Seiten, ")},
-        humanReadable(file.size(file_name), standard="SI"), ")", sep ="")
+        humanReadable(file.size(file_name), standard="SI"), ")</font>", sep ="")
   }
