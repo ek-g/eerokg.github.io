@@ -1,24 +1,42 @@
 [
   {
-    "path": "posts/dgp-hochschultag-2019/",
-    "title": "Präsentation: Symptomerfahrung von Patienten mit primären Hirntumoren",
-    "description": "Beitrag präsentiert am 10. DGP-Hochschultag in Münster.",
+    "path": "posts/2019-09-25-references-searching-mit-r/",
+    "title": "Eine Methode für 'reference searching' mit R und citecorp",
+    "description": "In diesem Text wird ein Arbeitsablauf mit R und citecorp dargestellt, um das 'forward and backward references searching' zu erleichtern.",
     "author": [
       {
         "name": "Eero Kuusisto-Gussmann",
         "url": {}
       }
     ],
-    "date": "2019-11-08",
+    "date": "2019-09-25",
+    "categories": [
+      "R",
+      "Literatursuche",
+      "German"
+    ],
+    "preview": "posts/2019-09-25-references-searching-mit-r/preview.jpg",
+    "last_modified": "2019-10-23T23:42:02+02:00"
+  },
+  {
+    "path": "posts/2019-09-21-pflege-von-hirntumorpatienten/",
+    "title": "Neuer Artikel: Pflege von Hirntumorpatienten - Komplikationen rechzeitig erkennen",
+    "description": "Der Artikel in der Zeitschrift \"Onkologische Pflege\" ist kostenlos verfügbar.",
+    "author": [
+      {
+        "name": "Eero Kuusisto-Gussmann",
+        "url": {}
+      }
+    ],
+    "date": "2019-09-21",
     "categories": [
       "Neuroonkologie",
       "Pflege",
-      "Präsentation",
       "German"
     ],
-    "preview": "posts/dgp-hochschultag-2019/preview.png",
-    "last_modified": "2019-11-07T10:43:53+01:00",
-    "preview_width": 1000,
-    "preview_height": 844
+    "preview": "posts/2019-09-21-pflege-von-hirntumorpatienten/preview.png",
+    "last_modified": "2019-11-03T13:04:26+01:00",
+    "preview_width": 1200,
+    "preview_height": 928
   }
 ]
