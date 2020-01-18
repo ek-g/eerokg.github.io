@@ -1,5 +1,27 @@
 [
   {
+    "path": "posts/2020-01-15-datenverarbeitung-mit-r/",
+    "title": "Datenverarbeitung mit R",
+    "description": "Ein Beispiel mit Studienrendenzahlen in gesundheitswissenschaftlichen Studiengängen 1998-2018.",
+    "author": [
+      {
+        "name": "Eero Kuusisto-Gussmann",
+        "url": {}
+      }
+    ],
+    "date": "2020-01-15",
+    "categories": [
+      "R",
+      "Datenvisualisierung",
+      "Datenverarbeitung",
+      "German"
+    ],
+    "preview": "posts/2020-01-15-datenverarbeitung-mit-r/grafik/stud_gesundheit_a4.png",
+    "last_modified": "2020-01-18T13:44:24+01:00",
+    "preview_width": 3507,
+    "preview_height": 2480
+  },
+  {
     "path": "posts/dgp-hochschultag-2019/",
     "title": "Präsentation: Symptomerfahrung von Patienten mit primären Hirntumoren",
     "description": "Beitrag präsentiert am 10. DGP-Hochschultag in Münster.",
