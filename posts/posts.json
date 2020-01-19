@@ -1,7 +1,7 @@
 [
   {
-    "path": "posts/2020-01-15-datenverarbeitung-mit-r/",
-    "title": "Datenverarbeitung mit R",
+    "path": "posts/2020-01-15-datenaufbereitung-mit-r/",
+    "title": "Datenaufbereitung mit R",
     "description": "Ein Beispiel mit Studienrendenzahlen in gesundheitswissenschaftlichen Studiengängen 1998-2018.",
     "author": [
       {
@@ -13,11 +13,11 @@
     "categories": [
       "R",
       "Datenvisualisierung",
-      "Datenverarbeitung",
+      "Datenaufbereitung",
       "German"
     ],
-    "preview": "posts/2020-01-15-datenverarbeitung-mit-r/preview.png",
-    "last_modified": "2020-01-19T13:23:22+01:00",
+    "preview": "posts/2020-01-15-datenaufbereitung-mit-r/preview.png",
+    "last_modified": "2020-01-19T18:32:29+01:00",
     "preview_width": 1200,
     "preview_height": 849
   },

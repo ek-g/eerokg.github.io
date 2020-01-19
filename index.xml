@@ -9,13 +9,13 @@
     <generator>Distill</generator>
     <lastBuildDate>Mi, 15 Jan 2020 00:00:00 +0000</lastBuildDate>
     <item>
-      <title>Datenverarbeitung mit R</title>
+      <title>Datenaufbereitung mit R</title>
       <dc:creator>Eero Kuusisto-Gussmann</dc:creator>
-      <link>https://blog.kuusisto.de/posts/2020-01-15-datenverarbeitung-mit-r</link>
+      <link>https://blog.kuusisto.de/posts/2020-01-15-datenaufbereitung-mit-r</link>
       <description>Ein Beispiel mit Studienrendenzahlen in gesundheitswissenschaftlichen Studiengängen 1998-2018.</description>
-      <guid>https://blog.kuusisto.de/posts/2020-01-15-datenverarbeitung-mit-r</guid>
+      <guid>https://blog.kuusisto.de/posts/2020-01-15-datenaufbereitung-mit-r</guid>
       <pubDate>Mi, 15 Jan 2020 00:00:00 +0000</pubDate>
-      <media:content url="https://blog.kuusisto.de/posts/2020-01-15-datenverarbeitung-mit-r/preview.png" medium="image" type="image/png" width="1200" height="849"/>
+      <media:content url="https://blog.kuusisto.de/posts/2020-01-15-datenaufbereitung-mit-r/preview.png" medium="image" type="image/png" width="1200" height="849"/>
     </item>
     <item>
       <title>Präsentation: Symptomerfahrung von Patienten mit primären Hirntumoren</title>
