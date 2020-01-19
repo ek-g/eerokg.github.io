@@ -1427,15 +1427,15 @@ erster_versuch</code></pre>
 <div class="layout-chunk" data-layout="l-body">
 <pre class="r"><code>
 zweiter_versuch &lt;- read_excel(&quot;_data/studienrende_gesundheit.xlsx&quot;,
-                  # SDie palten benennen
+                  # die Spalten benennen
                   col_names = c(&quot;SemBund&quot;, &quot;Studiengang&quot;,
                                &quot;Dt_m&quot;, &quot;Dt_f&quot;,
                                &quot;DtGesamt&quot;, &quot;Aus_m&quot;,
                                &quot;Aus_f&quot;, &quot;AusGesamt&quot;,
                                &quot;m&quot;,&quot;f&quot;, &quot;Gesamt&quot;),
-                  # Die ersten fünf Zeilen überspringen
+                  # die ersten fünf Zeilen überspringen
                   skip = 5,
-                  # Fehlende Daten vereinheitlichen
+                  # fehlende Daten vereinheitlichen
                   na = c(&quot;-&quot;, &quot;&quot;))
 
 zweiter_versuch</code></pre>
@@ -1457,7 +1457,7 @@ zweiter_versuch</code></pre>
 #   Gesamt &lt;dbl&gt;</code></pre>
 </div>
 <h1 id="verarbeiten">Verarbeiten</h1>
-<p>Jetzt haben die Spalten zwar etwas kryptische Namen, aber sie folgen einer einheitlichen Logik und beschreiben den Inhalt der Spalten. Die nächste Herausforderung ist die Spalte <code>SemBund</code>. Sie birgt nämlich drei Verschiedene Informationen: das Semester, das Bundesland und einen Code des Studienfaches. Da die Kodierungen keine zusätzlichen Informationen enthalten, können diese eigentlich auch entfernt werden. Das Wichtigste ist als Nächstes die Zeilen eindeutig zu einem Semester und Bundesland zuzuordnen. Ich persönlich nutze dafür am Liebsten die Werkzeuge aus dem <a href="https://www.tidyverse.org"><code>tidyverse</code>-Metapaketen</a> <span class="citation" data-cites="tidyverse">(Wickham et al. <a href="#ref-tidyverse">2019</a>)</span> und lade diese daher auf. Damit muss ich die einzelnen Paketen (u.a. <code>dplyr</code>, <code>stringr</code> und <code>ggplot2</code>) nicht separat laden, wenn ich sie später brauche.</p>
+<p>Jetzt haben die Spalten zwar etwas kryptische Namen, aber sie folgen einer einheitlichen Logik und beschreiben den Inhalt. Die nächste Herausforderung ist die Spalte <code>SemBund</code>. Sie birgt nämlich drei Verschiedene Informationen: das Semester, das Bundesland und einen Code des Studienfaches. Da die Kodierungen keine zusätzlichen Informationen enthalten, können diese eigentlich auch entfernt werden. Das Wichtigste ist als Nächstes die Zeilen eindeutig zu einem Semester und Bundesland zuzuordnen. Ich persönlich nutze dafür am Liebsten die Werkzeuge aus dem <a href="https://www.tidyverse.org"><code>tidyverse</code>-Metapaketen</a> <span class="citation" data-cites="tidyverse">(Wickham et al. <a href="#ref-tidyverse">2019</a>)</span> und lade diese daher auf. Damit muss ich die einzelnen Paketen (u.a. <code>dplyr</code>, <code>stringr</code> und <code>ggplot2</code>) nicht separat laden, wenn ich sie später brauche.</p>
 <div class="layout-chunk" data-layout="l-body">
 <pre class="r"><code>
 library(tidyverse)
