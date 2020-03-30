@@ -1,0 +1,1752 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1"/>
+  <meta name="generator" content="distill" />
+
+  <style type="text/css">
+  /* Hide doc at startup (prevent jankiness while JS renders/transforms) */
+  body {
+    visibility: hidden;
+  }
+  </style>
+
+ <!--radix_placeholder_import_source-->
+ <!--/radix_placeholder_import_source-->
+
+  <!--radix_placeholder_meta_tags-->
+<title>kuusisto.de: DIY Covid-19-Dashboard mit R und Shiny</title>
+
+<meta property="description" itemprop="description" content="Ein Dashboard-Beispiel mit dynamischen Daten aus Google Sheets."/>
+
+<link rel="canonical" href="https://blog.kuusisto.de/posts/2020-03-30-diy-covid-19-dashboard/"/>
+
+<!--  https://schema.org/Article -->
+<meta property="article:published" itemprop="datePublished" content="2020-03-29"/>
+<meta property="article:created" itemprop="dateCreated" content="2020-03-29"/>
+<meta name="article:author" content="Eero Kuusisto-Gussmann"/>
+
+<!--  https://developers.facebook.com/docs/sharing/webmasters#markup -->
+<meta property="og:title" content="kuusisto.de: DIY Covid-19-Dashboard mit R und Shiny"/>
+<meta property="og:type" content="article"/>
+<meta property="og:description" content="Ein Dashboard-Beispiel mit dynamischen Daten aus Google Sheets."/>
+<meta property="og:url" content="https://blog.kuusisto.de/posts/2020-03-30-diy-covid-19-dashboard/"/>
+<meta property="og:image" content="https://blog.kuusisto.de/posts/2020-03-30-diy-covid-19-dashboard/preview.png"/>
+<meta property="og:image:width" content="1500"/>
+<meta property="og:image:height" content="1002"/>
+<meta property="og:locale" content="en_US"/>
+<meta property="og:site_name" content="kuusisto.de"/>
+
+<!--  https://dev.twitter.com/cards/types/summary -->
+<meta property="twitter:card" content="summary_large_image"/>
+<meta property="twitter:title" content="kuusisto.de: DIY Covid-19-Dashboard mit R und Shiny"/>
+<meta property="twitter:description" content="Ein Dashboard-Beispiel mit dynamischen Daten aus Google Sheets."/>
+<meta property="twitter:url" content="https://blog.kuusisto.de/posts/2020-03-30-diy-covid-19-dashboard/"/>
+<meta property="twitter:image" content="https://blog.kuusisto.de/posts/2020-03-30-diy-covid-19-dashboard/preview.png"/>
+<meta property="twitter:image:width" content="1500"/>
+<meta property="twitter:image:height" content="1002"/>
+<meta property="twitter:site" content="@eerok"/>
+
+<!--/radix_placeholder_meta_tags-->
+  <!--radix_placeholder_rmarkdown_metadata-->
+
+<script type="text/json" id="radix-rmarkdown-metadata">
+{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["title","description","author","date","output","preview","categories","canonical_url"]}},"value":[{"type":"character","attributes":{},"value":["DIY Covid-19-Dashboard mit R und Shiny"]},{"type":"character","attributes":{},"value":["Ein Dashboard-Beispiel mit dynamischen Daten aus Google Sheets."]},{"type":"list","attributes":{},"value":[{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["name","url"]}},"value":[{"type":"character","attributes":{},"value":["Eero Kuusisto-Gussmann"]},{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":[]}},"value":[]}]}]},{"type":"character","attributes":{},"value":["03-29-2020"]},{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["distill::distill_article"]}},"value":[{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["self_contained"]}},"value":[{"type":"logical","attributes":{},"value":[false]}]}]},{"type":"character","attributes":{},"value":["preview.png"]},{"type":"character","attributes":{},"value":["R","Datenvisualisierung","Shiny","German"]},{"type":"character","attributes":{},"value":["https://blog.kuusisto.de/posts/2020-03-30-diy-covid-19-dashboard/"]}]}
+</script>
+<!--/radix_placeholder_rmarkdown_metadata-->
+  
+  <script type="text/json" id="radix-resource-manifest">
+  {"type":"character","attributes":{},"value":["diy-covid-19-dashboard_files/bowser-1.9.3/bowser.min.js","diy-covid-19-dashboard_files/crosstalk-1.0.0/css/crosstalk.css","diy-covid-19-dashboard_files/crosstalk-1.0.0/js/crosstalk.js","diy-covid-19-dashboard_files/crosstalk-1.0.0/js/crosstalk.js.map","diy-covid-19-dashboard_files/crosstalk-1.0.0/js/crosstalk.min.js","diy-covid-19-dashboard_files/crosstalk-1.0.0/js/crosstalk.min.js.map","diy-covid-19-dashboard_files/distill-2.2.21/template.v2.js","diy-covid-19-dashboard_files/htmlwidgets-1.5.1/htmlwidgets.js","diy-covid-19-dashboard_files/jquery-1.11.3/jquery-AUTHORS.txt","diy-covid-19-dashboard_files/jquery-1.11.3/jquery.js","diy-covid-19-dashboard_files/jquery-1.11.3/jquery.min.js","diy-covid-19-dashboard_files/jquery-1.11.3/jquery.min.map","diy-covid-19-dashboard_files/plotly-binding-4.9.2/plotly.js","diy-covid-19-dashboard_files/plotly-htmlwidgets-css-1.52.2/plotly-htmlwidgets.css","diy-covid-19-dashboard_files/plotly-main-1.52.2/plotly-latest.min.js","diy-covid-19-dashboard_files/typedarray-0.1/typedarray.min.js","diy-covid-19-dashboard_files/webcomponents-2.0.0/webcomponents.js","preview.png"]}
+  </script>
+  <!--radix_placeholder_navigation_in_header-->
+
+<script type="application/javascript">
+
+  window.headroom_prevent_pin = false;
+
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+
+    // initialize headroom for banner
+    var header = $('header').get(0);
+    var headerHeight = header.offsetHeight;
+    var headroom = new Headroom(header, {
+      onPin : function() {
+        if (window.headroom_prevent_pin) {
+          window.headroom_prevent_pin = false;
+          headroom.unpin();
+        }
+      }
+    });
+    headroom.init();
+    if(window.location.hash)
+      headroom.unpin();
+    $(header).addClass('headroom--transition');
+
+    // offset scroll location for banner on hash change
+    // (see: https://github.com/WickyNilliams/headroom.js/issues/38)
+    window.addEventListener("hashchange", function(event) {
+      window.scrollTo(0, window.pageYOffset - (headerHeight + 25));
+    });
+
+    // responsive menu
+    $('.distill-site-header').each(function(i, val) {
+      var topnav = $(this);
+      var toggle = topnav.find('.nav-toggle');
+      toggle.on('click', function() {
+        topnav.toggleClass('responsive');
+      });
+    });
+
+    // nav dropdowns
+    $('.nav-dropbtn').click(function(e) {
+      $(this).next('.nav-dropdown-content').toggleClass('nav-dropdown-active');
+      $(this).parent().siblings('.nav-dropdown')
+         .children('.nav-dropdown-content').removeClass('nav-dropdown-active');
+    });
+    $("body").click(function(e){
+      $('.nav-dropdown-content').removeClass('nav-dropdown-active');
+    });
+    $(".nav-dropdown").click(function(e){
+      e.stopPropagation();
+    });
+  });
+</script>
+
+<style type="text/css">
+
+/* Theme (user-documented overrideables for nav appearance) */
+
+.distill-site-nav {
+  color: rgba(255, 255, 255, 0.8);
+  background-color: #455a64;
+  font-size: 15px;
+  font-weight: 300;
+}
+
+.distill-site-nav a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.distill-site-nav a:hover {
+  color: white;
+}
+
+@media print {
+  .distill-site-nav {
+    display: none;
+  }
+}
+
+.distill-site-header {
+
+}
+
+.distill-site-footer {
+
+}
+
+
+/* Site Header */
+
+.distill-site-header {
+  width: 100%;
+  box-sizing: border-box;
+  z-index: 3;
+}
+
+.distill-site-header .nav-left {
+  display: inline-block;
+  margin-left: 8px;
+}
+
+@media screen and (max-width: 768px) {
+  .distill-site-header .nav-left {
+    margin-left: 0;
+  }
+}
+
+
+.distill-site-header .nav-right {
+  float: right;
+  margin-right: 8px;
+}
+
+.distill-site-header a,
+.distill-site-header .title {
+  display: inline-block;
+  text-align: center;
+  padding: 14px 10px 14px 10px;
+}
+
+.distill-site-header .title {
+  font-size: 18px;
+}
+
+.distill-site-header .logo {
+  padding: 0;
+}
+
+.distill-site-header .logo img {
+  display: none;
+  max-height: 20px;
+  width: auto;
+  margin-bottom: -4px;
+}
+
+.distill-site-header .nav-image img {
+  max-height: 18px;
+  width: auto;
+  display: inline-block;
+  margin-bottom: -3px;
+}
+
+
+
+@media screen and (min-width: 1000px) {
+  .distill-site-header .logo img {
+    display: inline-block;
+  }
+  .distill-site-header .nav-left {
+    margin-left: 20px;
+  }
+  .distill-site-header .nav-right {
+    margin-right: 20px;
+  }
+  .distill-site-header .title {
+    padding-left: 12px;
+  }
+}
+
+
+.distill-site-header .nav-toggle {
+  display: none;
+}
+
+.nav-dropdown {
+  display: inline-block;
+  position: relative;
+}
+
+.nav-dropdown .nav-dropbtn {
+  border: none;
+  outline: none;
+  color: rgba(255, 255, 255, 0.8);
+  padding: 16px 10px;
+  background-color: transparent;
+  font-family: inherit;
+  font-size: inherit;
+  font-weight: inherit;
+  margin: 0;
+  margin-top: 1px;
+  z-index: 2;
+}
+
+.nav-dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: white;
+  min-width: 200px;
+  border: 1px solid rgba(0,0,0,0.15);
+  border-radius: 4px;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.1);
+  z-index: 1;
+  margin-top: 2px;
+  white-space: nowrap;
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+.nav-dropdown-content hr {
+  margin-top: 4px;
+  margin-bottom: 4px;
+  border: none;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.nav-dropdown-active {
+  display: block;
+}
+
+.nav-dropdown-content a, .nav-dropdown-content .nav-dropdown-header {
+  color: black;
+  padding: 6px 24px;
+  text-decoration: none;
+  display: block;
+  text-align: left;
+}
+
+.nav-dropdown-content .nav-dropdown-header {
+  display: block;
+  padding: 5px 24px;
+  padding-bottom: 0;
+  text-transform: uppercase;
+  font-size: 14px;
+  color: #999999;
+  white-space: nowrap;
+}
+
+.nav-dropdown:hover .nav-dropbtn {
+  color: white;
+}
+
+.nav-dropdown-content a:hover {
+  background-color: #ddd;
+  color: black;
+}
+
+.nav-right .nav-dropdown-content {
+  margin-left: -45%;
+  right: 0;
+}
+
+@media screen and (max-width: 768px) {
+  .distill-site-header a, .distill-site-header .nav-dropdown  {display: none;}
+  .distill-site-header a.nav-toggle {
+    float: right;
+    display: block;
+  }
+  .distill-site-header .title {
+    margin-left: 0;
+  }
+  .distill-site-header .nav-right {
+    margin-right: 0;
+  }
+  .distill-site-header {
+    overflow: hidden;
+  }
+  .nav-right .nav-dropdown-content {
+    margin-left: 0;
+  }
+}
+
+
+@media screen and (max-width: 768px) {
+  .distill-site-header.responsive {position: relative;}
+  .distill-site-header.responsive a.nav-toggle {
+    position: absolute;
+    right: 0;
+    top: 0;
+  }
+  .distill-site-header.responsive a,
+  .distill-site-header.responsive .nav-dropdown {
+    display: block;
+    text-align: left;
+  }
+  .distill-site-header.responsive .nav-left,
+  .distill-site-header.responsive .nav-right {
+    width: 100%;
+  }
+  .distill-site-header.responsive .nav-dropdown {float: none;}
+  .distill-site-header.responsive .nav-dropdown-content {position: relative;}
+  .distill-site-header.responsive .nav-dropdown .nav-dropbtn {
+    display: block;
+    width: 100%;
+    text-align: left;
+  }
+}
+
+/* Site Footer */
+
+.distill-site-footer {
+  width: 100%;
+  overflow: hidden;
+  box-sizing: border-box;
+  z-index: 3;
+  margin-top: 30px;
+  padding-top: 30px;
+  padding-bottom: 30px;
+  text-align: center;
+}
+
+/* Headroom */
+
+d-title {
+  padding-top: 6rem;
+}
+
+@media print {
+  d-title {
+    padding-top: 4rem;
+  }
+}
+
+.headroom {
+  z-index: 1000;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+}
+
+.headroom--transition {
+  transition: all .4s ease-in-out;
+}
+
+.headroom--unpinned {
+  top: -100px;
+}
+
+.headroom--pinned {
+  top: 0;
+}
+
+</style>
+
+<link href="../../site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet"/>
+<link href="../../site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet"/>
+<script src="../../site_libs/headroom-0.9.4/headroom.min.js"></script>
+<!--/radix_placeholder_navigation_in_header-->
+  <!--radix_placeholder_distill-->
+
+<style type="text/css">
+
+body {
+  background-color: white;
+}
+
+.pandoc-table {
+  width: 100%;
+}
+
+.pandoc-table>caption {
+  margin-bottom: 10px;
+}
+
+.pandoc-table th:not([align]) {
+  text-align: left;
+}
+
+.pagedtable-footer {
+  font-size: 15px;
+}
+
+.html-widget {
+  margin-bottom: 2.0em;
+}
+
+.l-screen-inset {
+  padding-right: 16px;
+}
+
+.l-screen .caption {
+  margin-left: 10px;
+}
+
+.shaded {
+  background: rgb(247, 247, 247);
+  padding-top: 20px;
+  padding-bottom: 20px;
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.shaded .html-widget {
+  margin-bottom: 0;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.shaded .shaded-content {
+  background: white;
+}
+
+.text-output {
+  margin-top: 0;
+  line-height: 1.5em;
+}
+
+.hidden {
+  display: none !important;
+}
+
+d-article {
+  padding-bottom: 30px;
+}
+
+d-appendix {
+  padding-top: 30px;
+}
+
+d-article>p>img {
+  width: 100%;
+}
+
+d-article iframe {
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  margin-bottom: 2.0em;
+  width: 100%;
+}
+
+figure img.external {
+  background: white;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  box-shadow: 0 1px 8px rgba(0, 0, 0, 0.1);
+  padding: 18px;
+  box-sizing: border-box;
+}
+
+/* CSS for table of contents */
+
+.d-toc {
+  color: rgba(0,0,0,0.8);
+  font-size: 0.8em;
+  line-height: 1em;
+}
+
+.d-toc-header {
+  font-size: 0.6rem;
+  font-weight: 400;
+  color: rgba(0, 0, 0, 0.5);
+  text-transform: uppercase;
+  margin-top: 0;
+  margin-bottom: 1.3em;
+}
+
+.d-toc a {
+  border-bottom: none;
+}
+
+.d-toc ul {
+  padding-left: 0;
+}
+
+.d-toc li>ul {
+  padding-top: 0.8em;
+  padding-left: 16px;
+  margin-bottom: 0.6em;
+}
+
+.d-toc ul,
+.d-toc li {
+  list-style-type: none;
+}
+
+.d-toc li {
+  margin-bottom: 0.9em;
+}
+
+.d-toc-separator {
+  margin-top: 20px;
+  margin-bottom: 2em;
+}
+
+.d-article-with-toc {
+  border-top: none;
+  padding-top: 0;
+}
+
+
+
+/* Tweak code blocks (note that this CSS is repeated above in an injection
+   into the d-code shadow dom) */
+
+d-code {
+  overflow-x: auto !important;
+}
+
+pre.d-code code.d-code {
+  padding-left: 10px;
+  font-size: 12px;
+  border-left: 2px solid rgba(0,0,0,0.1);
+}
+
+pre.text-output {
+
+  font-size: 12px;
+  color: black;
+  background: none;
+  font-family: Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;
+  text-align: left;
+  white-space: pre;
+  word-spacing: normal;
+  word-break: normal;
+  word-wrap: normal;
+  line-height: 1.5;
+
+  -moz-tab-size: 4;
+  -o-tab-size: 4;
+  tab-size: 4;
+
+  -webkit-hyphens: none;
+  -moz-hyphens: none;
+  -ms-hyphens: none;
+  hyphens: none;
+}
+
+@media(min-width: 768px) {
+
+d-code {
+  overflow-x: visible !important;
+}
+
+pre.d-code code.d-code  {
+    padding-left: 18px;
+    font-size: 14px;
+}
+pre.text-output {
+  font-size: 14px;
+}
+}
+
+/* Figure */
+
+.figure {
+  position: relative;
+  margin-bottom: 2.5em;
+  margin-top: 1.5em;
+}
+
+.figure img {
+  width: 100%;
+}
+
+.figure .caption {
+  color: rgba(0, 0, 0, 0.6);
+  font-size: 12px;
+  line-height: 1.5em;
+}
+
+.figure img.external {
+  background: white;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  box-shadow: 0 1px 8px rgba(0, 0, 0, 0.1);
+  padding: 18px;
+  box-sizing: border-box;
+}
+
+.figure .caption a {
+  color: rgba(0, 0, 0, 0.6);
+}
+
+.figure .caption b,
+.figure .caption strong, {
+  font-weight: 600;
+  color: rgba(0, 0, 0, 1.0);
+}
+
+
+
+/* Tweak 1000px media break to show more text */
+
+@media(min-width: 1000px) {
+  .base-grid,
+  distill-header,
+  d-title,
+  d-abstract,
+  d-article,
+  d-appendix,
+  distill-appendix,
+  d-byline,
+  d-footnote-list,
+  d-citation-list,
+  distill-footer {
+    grid-template-columns: [screen-start] 1fr [page-start kicker-start] 80px [middle-start] 50px [text-start kicker-end] 65px 65px 65px 65px 65px 65px 65px 65px [text-end gutter-start] 65px [middle-end] 65px [page-end gutter-end] 1fr [screen-end];
+    grid-column-gap: 16px;
+  }
+
+  .grid {
+    grid-column-gap: 16px;
+  }
+
+  d-article {
+    font-size: 1.06rem;
+    line-height: 1.7em;
+  }
+  figure .caption, .figure .caption, figure figcaption {
+    font-size: 13px;
+  }
+}
+
+@media(min-width: 1180px) {
+  .base-grid,
+  distill-header,
+  d-title,
+  d-abstract,
+  d-article,
+  d-appendix,
+  distill-appendix,
+  d-byline,
+  d-footnote-list,
+  d-citation-list,
+  distill-footer {
+    grid-template-columns: [screen-start] 1fr [page-start kicker-start] 60px [middle-start] 60px [text-start kicker-end] 60px 60px 60px 60px 60px 60px 60px 60px [text-end gutter-start] 60px [middle-end] 60px [page-end gutter-end] 1fr [screen-end];
+    grid-column-gap: 32px;
+  }
+
+  .grid {
+    grid-column-gap: 32px;
+  }
+}
+
+
+/* Get the citation styles for the appendix (not auto-injected on render since
+   we do our own rendering of the citation appendix) */
+
+d-appendix .citation-appendix,
+.d-appendix .citation-appendix {
+  font-size: 11px;
+  line-height: 15px;
+  border-left: 1px solid rgba(0, 0, 0, 0.1);
+  padding-left: 18px;
+  border: 1px solid rgba(0,0,0,0.1);
+  background: rgba(0, 0, 0, 0.02);
+  padding: 10px 18px;
+  border-radius: 3px;
+  color: rgba(150, 150, 150, 1);
+  overflow: hidden;
+  margin-top: -12px;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+}
+
+
+/* Social footer */
+
+.social_footer {
+  margin-top: 30px;
+  margin-bottom: 0;
+  color: rgba(0,0,0,0.67);
+}
+
+.disqus-comments {
+  margin-right: 30px;
+}
+
+.disqus-comment-count {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.4);
+  cursor: pointer;
+}
+
+#disqus_thread {
+  margin-top: 30px;
+}
+
+.article-sharing a {
+  border-bottom: none;
+  margin-right: 8px;
+}
+
+.article-sharing a:hover {
+  border-bottom: none;
+}
+
+.sidebar-section.subscribe {
+  font-size: 12px;
+  line-height: 1.6em;
+}
+
+.subscribe p {
+  margin-bottom: 0.5em;
+}
+
+
+.article-footer .subscribe {
+  font-size: 15px;
+  margin-top: 45px;
+}
+
+
+/* Improve display for browsers without grid (IE/Edge <= 15) */
+
+.downlevel {
+  line-height: 1.6em;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Fira Sans", "Droid Sans", "Helvetica Neue", Arial, sans-serif;
+  margin: 0;
+}
+
+.downlevel .d-title {
+  padding-top: 6rem;
+  padding-bottom: 1.5rem;
+}
+
+.downlevel .d-title h1 {
+  font-size: 50px;
+  font-weight: 700;
+  line-height: 1.1em;
+  margin: 0 0 0.5rem;
+}
+
+.downlevel .d-title p {
+  font-weight: 300;
+  font-size: 1.2rem;
+  line-height: 1.55em;
+  margin-top: 0;
+}
+
+.downlevel .d-byline {
+  padding-top: 0.8em;
+  padding-bottom: 0.8em;
+  font-size: 0.8rem;
+  line-height: 1.8em;
+}
+
+.downlevel .section-separator {
+  border: none;
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.downlevel .d-article {
+  font-size: 1.06rem;
+  line-height: 1.7em;
+  padding-top: 1rem;
+  padding-bottom: 2rem;
+}
+
+
+.downlevel .d-appendix {
+  padding-left: 0;
+  padding-right: 0;
+  max-width: none;
+  font-size: 0.8em;
+  line-height: 1.7em;
+  margin-bottom: 0;
+  color: rgba(0,0,0,0.5);
+  padding-top: 40px;
+  padding-bottom: 48px;
+}
+
+.downlevel .footnotes ol {
+  padding-left: 13px;
+}
+
+.downlevel .base-grid,
+.downlevel .distill-header,
+.downlevel .d-title,
+.downlevel .d-abstract,
+.downlevel .d-article,
+.downlevel .d-appendix,
+.downlevel .distill-appendix,
+.downlevel .d-byline,
+.downlevel .d-footnote-list,
+.downlevel .d-citation-list,
+.downlevel .distill-footer,
+.downlevel .appendix-bottom,
+.downlevel .posts-container {
+  padding-left: 40px;
+  padding-right: 40px;
+}
+
+@media(min-width: 768px) {
+  .downlevel .base-grid,
+  .downlevel .distill-header,
+  .downlevel .d-title,
+  .downlevel .d-abstract,
+  .downlevel .d-article,
+  .downlevel .d-appendix,
+  .downlevel .distill-appendix,
+  .downlevel .d-byline,
+  .downlevel .d-footnote-list,
+  .downlevel .d-citation-list,
+  .downlevel .distill-footer,
+  .downlevel .appendix-bottom,
+  .downlevel .posts-container {
+  padding-left: 150px;
+  padding-right: 150px;
+  max-width: 900px;
+}
+}
+
+.downlevel pre code {
+  display: block;
+  border-left: 2px solid rgba(0, 0, 0, .1);
+  padding: 0 0 0 20px;
+  font-size: 14px;
+}
+
+.downlevel code, .downlevel pre {
+  color: black;
+  background: none;
+  font-family: Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;
+  text-align: left;
+  white-space: pre;
+  word-spacing: normal;
+  word-break: normal;
+  word-wrap: normal;
+  line-height: 1.5;
+
+  -moz-tab-size: 4;
+  -o-tab-size: 4;
+  tab-size: 4;
+
+  -webkit-hyphens: none;
+  -moz-hyphens: none;
+  -ms-hyphens: none;
+  hyphens: none;
+}
+
+</style>
+
+<script type="application/javascript">
+
+function is_downlevel_browser() {
+  if (bowser.isUnsupportedBrowser({ msie: "12", msedge: "16"},
+                                 window.navigator.userAgent)) {
+    return true;
+  } else {
+    return window.load_distill_framework === undefined;
+  }
+}
+
+// show body when load is complete
+function on_load_complete() {
+
+  // set body to visible
+  document.body.style.visibility = 'visible';
+
+  // force redraw for leaflet widgets
+  if (window.HTMLWidgets) {
+    var maps = window.HTMLWidgets.findAll(".leaflet");
+    $.each(maps, function(i, el) {
+      var map = this.getMap();
+      map.invalidateSize();
+      map.eachLayer(function(layer) {
+        if (layer instanceof L.TileLayer)
+          layer.redraw();
+      });
+    });
+  }
+
+  // trigger 'shown' so htmlwidgets resize
+  $('d-article').trigger('shown');
+}
+
+function init_distill() {
+
+  init_common();
+
+  // create front matter
+  var front_matter = $('<d-front-matter></d-front-matter>');
+  $('#distill-front-matter').wrap(front_matter);
+
+  // create d-title
+  $('.d-title').changeElementType('d-title');
+
+  // create d-byline
+  var byline = $('<d-byline></d-byline>');
+  $('.d-byline').replaceWith(byline);
+
+  // create d-article
+  var article = $('<d-article></d-article>');
+  $('.d-article').wrap(article).children().unwrap();
+
+  // move posts container into article
+  $('.posts-container').appendTo($('d-article'));
+
+  // create d-appendix
+  $('.d-appendix').changeElementType('d-appendix');
+
+  // create d-bibliography
+  var bibliography = $('<d-bibliography></d-bibliography>');
+  $('#distill-bibliography').wrap(bibliography);
+
+  // flag indicating that we have appendix items
+  var appendix = $('.appendix-bottom').children('h3').length > 0;
+
+  // replace citations with <d-cite>
+  $('.citation').each(function(i, val) {
+    appendix = true;
+    var cites = $(this).attr('data-cites').split(" ");
+    var dt_cite = $('<d-cite></d-cite>');
+    dt_cite.attr('key', cites.join());
+    $(this).replaceWith(dt_cite);
+  });
+  // remove refs
+  $('#refs').remove();
+
+  // replace footnotes with <d-footnote>
+  $('.footnote-ref').each(function(i, val) {
+    appendix = true;
+    var href = $(this).attr('href');
+    var id = href.replace('#', '');
+    var fn = $('#' + id);
+    var fn_p = $('#' + id + '>p');
+    fn_p.find('.footnote-back').remove();
+    var text = fn_p.html();
+    var dtfn = $('<d-footnote></d-footnote>');
+    dtfn.html(text);
+    $(this).replaceWith(dtfn);
+  });
+  // remove footnotes
+  $('.footnotes').remove();
+
+  $('h1.appendix, h2.appendix').each(function(i, val) {
+    $(this).changeElementType('h3');
+  });
+  $('h3.appendix').each(function(i, val) {
+    var id = $(this).attr('id');
+    $('.d-toc a[href="#' + id + '"]').parent().remove();
+    appendix = true;
+    $(this).nextUntil($('h1, h2, h3')).addBack().appendTo($('d-appendix'));
+  });
+
+  // show d-appendix if we have appendix content
+  $("d-appendix").css('display', appendix ? 'grid' : 'none');
+
+  // replace code blocks with d-code
+  $('pre>code').each(function(i, val) {
+    var code = $(this);
+    var pre = code.parent();
+    var clz = "";
+    var language = pre.attr('class');
+    if (language) {
+      // map unknown languages to "clike" (without this they just dissapear)
+      if ($.inArray(language, ["bash", "clike", "css", "go", "html",
+                               "javascript", "js", "julia", "lua", "markdown",
+                               "markup", "mathml", "python", "svg", "xml"]) == -1)
+        language = "clike";
+      language = ' language="' + language + '"';
+      var dt_code = $('<d-code block' + language + clz + '></d-code>');
+      dt_code.text(code.text());
+      pre.replaceWith(dt_code);
+    } else {
+      code.addClass('text-output').unwrap().changeElementType('pre');
+    }
+  });
+
+  // localize layout chunks to just output
+  $('.layout-chunk').each(function(i, val) {
+
+    // capture layout
+    var layout = $(this).attr('data-layout');
+
+    // apply layout to markdown level block elements
+    var elements = $(this).children().not('d-code, pre.text-output, script');
+    elements.each(function(i, el) {
+      var layout_div = $('<div class="' + layout + '"></div>');
+      if (layout_div.hasClass('shaded')) {
+        var shaded_content = $('<div class="shaded-content"></div>');
+        $(this).wrap(shaded_content);
+        $(this).parent().wrap(layout_div);
+      } else {
+        $(this).wrap(layout_div);
+      }
+    });
+
+
+    // unwrap the layout-chunk div
+    $(this).children().unwrap();
+  });
+
+  // load distill framework
+  load_distill_framework();
+
+  // wait for window.distillRunlevel == 4 to do post processing
+  function distill_post_process() {
+
+    if (!window.distillRunlevel || window.distillRunlevel < 4)
+      return;
+
+    // hide author/affiliations entirely if we have no authors
+    var front_matter = JSON.parse($("#distill-front-matter").html());
+    var have_authors = front_matter.authors && front_matter.authors.length > 0;
+    if (!have_authors)
+      $('d-byline').addClass('hidden');
+
+    // table of contents
+    if (have_authors) // adjust border if we are in authors
+      $('.d-toc').parent().addClass('d-article-with-toc');
+
+    // strip links that point to #
+    $('.authors-affiliations').find('a[href="#"]').removeAttr('href');
+
+    // hide elements of author/affiliations grid that have no value
+    function hide_byline_column(caption) {
+      $('d-byline').find('h3:contains("' + caption + '")').parent().css('visibility', 'hidden');
+    }
+
+    // affiliations
+    var have_affiliations = false;
+    for (var i = 0; i<front_matter.authors.length; ++i) {
+      var author = front_matter.authors[i];
+      if (author.affiliation !== "&nbsp;") {
+        have_affiliations = true;
+        break;
+      }
+    }
+    if (!have_affiliations)
+      $('d-byline').find('h3:contains("Affiliations")').css('visibility', 'hidden');
+
+    // published date
+    if (!front_matter.publishedDate)
+      hide_byline_column("Published");
+
+    // document object identifier
+    var doi = $('d-byline').find('h3:contains("DOI")');
+    var doi_p = doi.next().empty();
+    if (!front_matter.doi) {
+      // if we have a citation and valid citationText then link to that
+      if ($('#citation').length > 0 && front_matter.citationText) {
+        doi.html('Citation');
+        $('<a href="#citation"></a>')
+          .text(front_matter.citationText)
+          .appendTo(doi_p);
+      } else {
+        hide_byline_column("DOI");
+      }
+    } else {
+      $('<a></a>')
+         .attr('href', "https://doi.org/" + front_matter.doi)
+         .html(front_matter.doi)
+         .appendTo(doi_p);
+    }
+
+     // change plural form of authors/affiliations
+    if (front_matter.authors.length === 1) {
+      var grid = $('.authors-affiliations');
+      grid.children('h3:contains("Authors")').text('Author');
+      grid.children('h3:contains("Affiliations")').text('Affiliation');
+    }
+
+    // inject pre code styles (can't do this with a global stylesheet b/c a shadow root is used)
+    $('d-code').each(function(i, val) {
+      var style = document.createElement('style');
+      style.innerHTML = 'pre code { padding-left: 10px; font-size: 12px; border-left: 2px solid rgba(0,0,0,0.1); } ' +
+                        '@media(min-width: 768px) { pre code { padding-left: 18px; font-size: 14px; } }';
+      if (this.shadowRoot)
+        this.shadowRoot.appendChild(style);
+    });
+
+    // move appendix-bottom entries to the bottom
+    $('.appendix-bottom').appendTo('d-appendix').children().unwrap();
+    $('.appendix-bottom').remove();
+
+    // clear polling timer
+    clearInterval(tid);
+
+    // show body now that everything is ready
+    on_load_complete();
+  }
+
+  var tid = setInterval(distill_post_process, 50);
+  distill_post_process();
+
+}
+
+function init_downlevel() {
+
+  init_common();
+
+   // insert hr after d-title
+  $('.d-title').after($('<hr class="section-separator"/>'));
+
+  // check if we have authors
+  var front_matter = JSON.parse($("#distill-front-matter").html());
+  var have_authors = front_matter.authors && front_matter.authors.length > 0;
+
+  // manage byline/border
+  if (!have_authors)
+    $('.d-byline').remove();
+  $('.d-byline').after($('<hr class="section-separator"/>'));
+  $('.d-byline a').remove();
+
+  // remove toc
+  $('.d-toc-header').remove();
+  $('.d-toc').remove();
+  $('.d-toc-separator').remove();
+
+  // move appendix elements
+  $('h1.appendix, h2.appendix').each(function(i, val) {
+    $(this).changeElementType('h3');
+  });
+  $('h3.appendix').each(function(i, val) {
+    $(this).nextUntil($('h1, h2, h3')).addBack().appendTo($('.d-appendix'));
+  });
+
+
+  // inject headers into references and footnotes
+  var refs_header = $('<h3></h3>');
+  refs_header.text('References');
+  $('#refs').prepend(refs_header);
+
+  var footnotes_header = $('<h3></h3');
+  footnotes_header.text('Footnotes');
+  $('.footnotes').children('hr').first().replaceWith(footnotes_header);
+
+  // move appendix-bottom entries to the bottom
+  $('.appendix-bottom').appendTo('.d-appendix').children().unwrap();
+  $('.appendix-bottom').remove();
+
+  // remove appendix if it's empty
+  if ($('.d-appendix').children().length === 0)
+    $('.d-appendix').remove();
+
+  // prepend separator above appendix
+  $('.d-appendix').before($('<hr class="section-separator" style="clear: both"/>'));
+
+  // trim code
+  $('pre>code').each(function(i, val) {
+    $(this).html($.trim($(this).html()));
+  });
+
+  // move posts-container right before article
+  $('.posts-container').insertBefore($('.d-article'));
+
+  $('body').addClass('downlevel');
+
+  on_load_complete();
+}
+
+
+function init_common() {
+
+  // jquery plugin to change element types
+  (function($) {
+    $.fn.changeElementType = function(newType) {
+      var attrs = {};
+
+      $.each(this[0].attributes, function(idx, attr) {
+        attrs[attr.nodeName] = attr.nodeValue;
+      });
+
+      this.replaceWith(function() {
+        return $("<" + newType + "/>", attrs).append($(this).contents());
+      });
+    };
+  })(jQuery);
+
+  // prevent underline for linked images
+  $('a > img').parent().css({'border-bottom' : 'none'});
+
+  // mark non-body figures created by knitr chunks as 100% width
+  $('.layout-chunk').each(function(i, val) {
+    var figures = $(this).find('img, .html-widget');
+    if ($(this).attr('data-layout') !== "l-body") {
+      figures.css('width', '100%');
+    } else {
+      figures.css('max-width', '100%');
+      figures.filter("[width]").each(function(i, val) {
+        var fig = $(this);
+        fig.css('width', fig.attr('width') + 'px');
+      });
+
+    }
+  });
+
+  // auto-append index.html to post-preview links in file: protocol
+  // and in rstudio ide preview
+  $('.post-preview').each(function(i, val) {
+    if (window.location.protocol === "file:")
+      $(this).attr('href', $(this).attr('href') + "index.html");
+  });
+
+  // get rid of index.html references in header
+  if (window.location.protocol !== "file:") {
+    $('.distill-site-header a[href]').each(function(i,val) {
+      $(this).attr('href', $(this).attr('href').replace("index.html", "./"));
+    });
+  }
+
+  // add class to pandoc style tables
+  $('tr.header').parent('thead').parent('table').addClass('pandoc-table');
+  $('.kable-table').children('table').addClass('pandoc-table');
+
+  // add figcaption style to table captions
+  $('caption').parent('table').addClass("figcaption");
+
+  // initialize posts list
+  if (window.init_posts_list)
+    window.init_posts_list();
+
+  // implmement disqus comment link
+  $('.disqus-comment-count').click(function() {
+    window.headroom_prevent_pin = true;
+    $('#disqus_thread').toggleClass('hidden');
+    if (!$('#disqus_thread').hasClass('hidden')) {
+      var offset = $(this).offset();
+      $(window).resize();
+      $('html, body').animate({
+        scrollTop: offset.top - 35
+      });
+    }
+  });
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+  if (is_downlevel_browser())
+    init_downlevel();
+  else
+    window.addEventListener('WebComponentsReady', init_distill);
+});
+
+</script>
+
+<!--/radix_placeholder_distill-->
+  <script src="../../site_libs/htmlwidgets-1.5.1/htmlwidgets.js"></script>
+  <script src="../../site_libs/plotly-binding-4.9.2/plotly.js"></script>
+  <script src="../../site_libs/typedarray-0.1/typedarray.min.js"></script>
+  <script src="../../site_libs/jquery-1.11.3/jquery.min.js"></script>
+  <link href="../../site_libs/crosstalk-1.0.0/css/crosstalk.css" rel="stylesheet" />
+  <script src="../../site_libs/crosstalk-1.0.0/js/crosstalk.min.js"></script>
+  <link href="../../site_libs/plotly-htmlwidgets-css-1.52.2/plotly-htmlwidgets.css" rel="stylesheet" />
+  <script src="../../site_libs/plotly-main-1.52.2/plotly-latest.min.js"></script>
+  <script src="../../site_libs/bowser-1.9.3/bowser.min.js"></script>
+  <script src="../../site_libs/webcomponents-2.0.0/webcomponents.js"></script>
+  <script src="../../site_libs/distill-2.2.21/template.v2.js"></script>
+  <!--radix_placeholder_site_in_header-->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-148515502-1"></script>
+<script>
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'UA-148515502-1');
+</script>
+<style type="text/css">
+*{font-family: 'Fira Sans', sans-serif;}
+.bold{font-weight:bold;}
+.italic{font-style: italic;}
+.oblique{font-style: oblique;}
+
+code,
+.code,
+pre {
+  font-family: "Lucida Sans Typewriter", "Lucida Console", monaco, "Bitstream Vera Sans Mono", monospace; 
+  background: #fff6f2;
+  font-size: 15px;
+  padding: 0;
+  padding: 2px;
+  border-radius: 4px;
+  }
+
+.distill-site-nav {
+  color: #E95420;
+  background-color: #f7f7f7;
+  font-size: 15px;
+  font-weight: bold;
+}
+
+.distill-site-nav a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.distill-site-nav a:hover {
+  color: gray;
+}
+
+.distill-site-header {
+}
+
+.distill-site-footer {
+  font-size: 12px;
+  font-weight: 300;
+}
+
+@media print {
+  .distill-site-nav {
+    display: none;
+  }
+}
+.icon-link {
+  border: none;
+}
+</style>
+<!--/radix_placeholder_site_in_header-->
+
+
+</head>
+
+<body>
+
+<!--radix_placeholder_front_matter-->
+
+<script id="distill-front-matter" type="text/json">
+{"title":"DIY Covid-19-Dashboard mit R und Shiny","description":"Ein Dashboard-Beispiel mit dynamischen Daten aus Google Sheets.","authors":[{"author":"Eero Kuusisto-Gussmann","authorURL":{},"affiliation":"&nbsp;","affiliationURL":"#"}],"publishedDate":"2020-03-29T00:00:00.000+01:00","citationText":"Kuusisto-Gussmann, 2020"}
+</script>
+
+<!--/radix_placeholder_front_matter-->
+<!--radix_placeholder_navigation_before_body-->
+<header class="header header--fixed" role="banner">
+<nav class="distill-site-nav distill-site-header">
+<div class="nav-left">
+<a href="../../index.html" class="title">kuusisto.de</a>
+</div>
+<div class="nav-right">
+<a href="../../index.html">Posts</a>
+<a href="../../about.html">Über mich</a>
+<a href="javascript:void(0);" class="nav-toggle">&#9776;</a>
+</div>
+</nav>
+</header>
+<!--/radix_placeholder_navigation_before_body-->
+<!--radix_placeholder_site_before_body-->
+<!--/radix_placeholder_site_before_body-->
+
+<div class="d-title">
+<h1>DIY Covid-19-Dashboard mit R und Shiny</h1>
+<p>Ein Dashboard-Beispiel mit dynamischen Daten aus Google Sheets.</p>
+</div>
+
+<div class="d-byline">
+  Eero Kuusisto-Gussmann true 
+  
+<br/>03-29-2020
+</div>
+
+<div class="d-article">
+<h1 id="einleitung">Einleitung</h1>
+<p>Mittlerweile gibt es sicherlich schon genügend verschiedene Dashboards mit Covid-19-Daten aus aller Welt. Da es mir aber in der Quarantäne etwas langweilig wurde, wollte ich aber auch selbst eins erstellen, um u.a. <a href="https://shiny.rstudio.com">Shiny</a>, <a href="https://googlesheets4.tidyverse.org">googlesheets4</a> und <a href="https://plotly.com">Plotly</a> besser kennenzulernen. Das sind alle R-Pakete, deren Funktionalität ich bereits grob kenne, aber ich habe noch nie so richtig mit denen gearbeitet.</p>
+<h1 id="passende-daten-finden">Passende Daten finden</h1>
+<p>Die offiziellen Daten von <a href="https://www.rki.de">Robert Koch Institute</a> werden leider ziemlich langsam aktualisiert. Deutlich aktueller sind die durch Crowdsourcing gesammelten Fallzahlen von <a href="http://www.risklayer.com/de/">Risklayer</a>, die u.a. <a href="https://twitter.com/risklayer">auf Twitter</a> täglich veröffentlicht werden. Sie nutzen als Werkzeug eine <a href="https://docs.google.com/spreadsheets/u/1/d/1wg-s4_Lz2Stil6spQEYFdZaBEp8nWW26gVyfHqvcl8s/">Google Tabelle</a>, die von aktiven Freiwilligen direkt mit den Daten aus den Landkreisen aktualisiert werden. Als erstes müssen wir also die Daten aus dieser Tabelle mit <code>googlesheets4</code> herunterladen, die dafür viele Möglichkeiten anbietet. In diesem Fall ist die Tabelle öffentlich zugänglich und wir brauchen nur den ID-Key, der freundlicherweise ein Teil des Links bildet.</p>
+<div class="layout-chunk" data-layout="l-body">
+<pre class="r"><code>
+library(googlesheets4)
+library(tidyverse)
+
+# googlesheets4 ohne Einloggen nutzen 
+sheets_deauth()
+
+# ID von der Tabelle speichern
+risklayer &lt;- &quot;1wg-s4_Lz2Stil6spQEYFdZaBEp8nWW26gVyfHqvcl8s&quot;
+    
+# Daten von den einzelnen Bundesländern aus dem Blatt &#39;Curve2&#39; einlesen
+landdata_raw &lt;- sheets_read(risklayer,
+                            sheet = &quot;Curve2&quot;,
+                            range = cell_rows(31:47))
+
+# Bevölkerungdaten aus dem Blatt &#39;Statistics&#39; als Vektor einlesen und in ein tibble kombinieren
+bevoelk &lt;- tibble(Bundesland = pull(sheets_read(risklayer,
+                                                sheet = &quot;Statistics&quot;,
+                                                range = &quot;B1:B17&quot;)),
+                  Bevoelkerung = pull(sheets_read(risklayer,
+                                                  sheet = &quot;Statistics&quot;,
+                                                  range = &quot;G1:G17&quot;)),
+                  .name_repair = &quot;minimal&quot;)</code></pre>
+</div>
+<p>So, jetzt haben wir zwei Dataframes generiert: im <code>landdata_raw</code> hat ein Bundesland jeweils eine Zeile und die täglichen Zahlen sind in den Spalten gespeichert:</p>
+<div class="layout-chunk" data-layout="l-body">
+<pre><code>
+# A tibble: 16 x 25
+   Bundesland `08.03.` `09.03.` `10.03.` `11.03.` `12.03.` `13.03.`
+   &lt;chr&gt;         &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;
+ 1 Nordrhein…      484      545      641      801     1182     1618
+ 2 Bayern          217      256      315      366      517      661
+ 3 Baden-Wür…      199      234      277      367      559      814
+ 4 Niedersac…       33       42       66       79      148      229
+ 5 Hessen           21       26       39       51      104      166
+ 6 Rheinland…       19       22       24       39       52      110
+ 7 Berlin           40       48       58       90      137      176
+ 8 Hamburg          17       22       35       54       88      123
+ 9 Sachsen          10       12       25       29       49       77
+10 Schleswig…        9       12       14       29       35       48
+11 Brandenbu…        6        8       16       24       31       43
+12 Thüringen         2        2        8       11       18       32
+13 Saarland          4        6        7       14       29       35
+14 Sachsen-A…        1        1        8       19       31       39
+15 Mecklenbu…        8       10       14       17       23       33
+16 Bremen            4        4       22       32       42       48
+# … with 18 more variables: `14.03.` &lt;dbl&gt;, `15.03.` &lt;dbl&gt;,
+#   `16.03.` &lt;dbl&gt;, `17.03.` &lt;dbl&gt;, `18.03.` &lt;dbl&gt;, `19.03.` &lt;dbl&gt;,
+#   `20.03.` &lt;dbl&gt;, `21.03.` &lt;dbl&gt;, `22.03.` &lt;dbl&gt;, `23.03.` &lt;dbl&gt;,
+#   `24.03.` &lt;dbl&gt;, `25.03.` &lt;dbl&gt;, `26.03.` &lt;dbl&gt;, `27.03.` &lt;dbl&gt;,
+#   `28.03.` &lt;dbl&gt;, `29.03.` &lt;dbl&gt;, `30.03.` &lt;dbl&gt;, `31.03.` &lt;lgl&gt;</code></pre>
+</div>
+<p>Im <code>bevoelk</code> finden wir die Einwohnerdaten der Bundesländer:</p>
+<div class="layout-chunk" data-layout="l-body">
+<pre><code>
+# A tibble: 16 x 2
+   Bundesland             Bevoelkerung
+   &lt;chr&gt;                         &lt;dbl&gt;
+ 1 Schleswig-Holstein          2896712
+ 2 Hamburg                     1841179
+ 3 Niedersachsen               7982448
+ 4 Bremen                       682986
+ 5 Nordrhein-Westfalen        17932651
+ 6 Hessen                      6265809
+ 7 Rheinland-Pfalz             4084844
+ 8 Baden-Württemberg          11069533
+ 9 Bayern                     13076721
+10 Saarland                     990509
+11 Berlin                      3644826
+12 Brandenburg                 2511917
+13 Mecklenburg-Vorpommern      1609675
+14 Sachsen                     4077937
+15 Sachsen-Anhalt              2208321
+16 Thüringen                   2143145</code></pre>
+</div>
+<p>Dann müssen wir noch <code>landdata_raw</code> einmal “rotieren”, damit die Daten in einem “tidy” Format sind. Aktuell sind die täglichen Zahlen als Spalten vorhanden, aber die Bearbeitung ist einfacher, wenn eine Beobachtung immer eine Zeile bildet. Das heißt jedes Bundesland bekommt eine Zeile pro Tag mit der aktuellen Zahl der Infizierte. Darüber hinaus möchte ich die Einwohnerzahlen dabei haben, damit ich z.B. Infizierte pro 100000 Einwohner berechnen kann.</p>
+<div class="layout-chunk" data-layout="l-body">
+<pre class="r"><code>
+# Fürs Formatieren des Datums
+library(lubridate)
+
+landdata &lt;- landdata_raw %&gt;%
+        # Daten &#39;rotieren&#39;, Spaltennamen in &#39;Datum&#39; und Werte in &#39;Infizierte&#39; speichern
+        pivot_longer(-Bundesland, names_to = &quot;Datum&quot;, values_to = &quot;Infizierte&quot;) %&gt;% 
+        # Das Datum richtig formatieren und leere Zeilen entfernen
+        mutate(Datum = as_date(Datum, tz = &quot;Europe/Berlin&quot;, format = &quot;%e.%m.&quot;)) %&gt;% 
+                drop_na()
+
+# Mit Bevölkerungsdaten ergänzen: 
+landdata &lt;- left_join(landdata, bevoelk, &quot;Bundesland&quot;)
+
+landdata</code></pre>
+<pre><code>
+# A tibble: 368 x 4
+   Bundesland          Datum      Infizierte Bevoelkerung
+   &lt;chr&gt;               &lt;date&gt;          &lt;dbl&gt;        &lt;dbl&gt;
+ 1 Nordrhein-Westfalen 2020-03-08        484     17932651
+ 2 Nordrhein-Westfalen 2020-03-09        545     17932651
+ 3 Nordrhein-Westfalen 2020-03-10        641     17932651
+ 4 Nordrhein-Westfalen 2020-03-11        801     17932651
+ 5 Nordrhein-Westfalen 2020-03-12       1182     17932651
+ 6 Nordrhein-Westfalen 2020-03-13       1618     17932651
+ 7 Nordrhein-Westfalen 2020-03-14       2027     17932651
+ 8 Nordrhein-Westfalen 2020-03-15       2557     17932651
+ 9 Nordrhein-Westfalen 2020-03-16       3104     17932651
+10 Nordrhein-Westfalen 2020-03-17       3976     17932651
+# … with 358 more rows</code></pre>
+</div>
+<p>Das mag für menschliche Augen nicht so gut lesbar sein, aber für die Bearbeitung ist es deutlich besser so. Wir können jetzt z.B. mit einer einfachen Berechnung herausfinden in welchem Bundesland am 10.3.2020 die Zahl der Infizierten im Verhältnis zur Einwohnerzahl am höchsten war.</p>
+<div class="layout-chunk" data-layout="l-body">
+<pre class="r"><code>
+landdata %&gt;% 
+  filter(Datum == &quot;2020-03-10&quot;) %&gt;% 
+  mutate(pro100000 = Infizierte / Bevoelkerung * 100000) %&gt;% 
+  arrange(desc(pro100000)) %&gt;% 
+  select(-Bevoelkerung)</code></pre>
+<pre><code>
+# A tibble: 16 x 4
+   Bundesland             Datum      Infizierte pro100000
+   &lt;chr&gt;                  &lt;date&gt;          &lt;dbl&gt;     &lt;dbl&gt;
+ 1 Nordrhein-Westfalen    2020-03-10        641     3.57 
+ 2 Bremen                 2020-03-10         22     3.22 
+ 3 Baden-Württemberg      2020-03-10        277     2.50 
+ 4 Bayern                 2020-03-10        315     2.41 
+ 5 Hamburg                2020-03-10         35     1.90 
+ 6 Berlin                 2020-03-10         58     1.59 
+ 7 Mecklenburg-Vorpommern 2020-03-10         14     0.870
+ 8 Niedersachsen          2020-03-10         66     0.827
+ 9 Saarland               2020-03-10          7     0.707
+10 Brandenburg            2020-03-10         16     0.637
+11 Hessen                 2020-03-10         39     0.622
+12 Sachsen                2020-03-10         25     0.613
+13 Rheinland-Pfalz        2020-03-10         24     0.588
+14 Schleswig-Holstein     2020-03-10         14     0.483
+15 Thüringen              2020-03-10          8     0.373
+16 Sachsen-Anhalt         2020-03-10          8     0.362</code></pre>
+</div>
+<h1 id="daten-visualisieren">Daten visualisieren</h1>
+<p>Dann generieren wir ein interaktives Liniendiagramm mit <a href="https://plotly.com">Plotly</a>. Auf die X-Achse kommt das Datum, auf die Y-Achse die Zahl der Infizierten, die nach Bundesland separat dargestellt werden sollen.</p>
+<div class="layout-chunk" data-layout="l-body">
+<pre class="r"><code>
+library(plotly)
+
+plot &lt;- landdata %&gt;% 
+        plot_ly(x =  ~ Datum,
+                y =  ~ Infizierte,
+                color =  ~ Bundesland,
+                type = &#39;scatter&#39;,
+                mode = &#39;lines&#39;,
+                # Das hier ist nur für bessere Formatierung:
+                text = ~ Bundesland,
+                hovertemplate = paste(&quot;&lt;b&gt;%{text}&lt;/b&gt;&lt;br&gt;&quot;,
+                                      &quot;%{yaxis.title.text}: %{y:d}&lt;br&gt;&quot;,
+                                      &quot;%{xaxis.title.text}: %{x}&quot;,
+                                      &quot;&lt;extra&gt;&lt;/extra&gt;&quot;)
+                )</code></pre>
+</div>
+<p>Der Unterschied zu anderen Diagrammen, die man z.B. mit <code>ggplot2</code> generiert, ist, dass sie interaktiv sind. Die Legende kann man z.B. anklicken, um Länder ein- bzw. ausblenden, was mit einem einfachen Diagramm viele verschiedene Vergleiche und Darstellungen ermöglicht.</p>
+<div class="layout-chunk" data-layout="l-body-outset">
+<div class="figure" style="text-align: center"><span id="fig:unnamed-chunk-7"></span>
+<div id="htmlwidget-8bc3058b5a33ee53cdfc" style="width:624px;height:672px;" class="plotly html-widget"></div>
+<script type="application/json" data-for="htmlwidget-8bc3058b5a33ee53cdfc">{"x":{"visdat":{"64683bf3ebe4":["function () ","plotlyVisDat"]},"cur_data":"64683bf3ebe4","attrs":{"64683bf3ebe4":{"x":{},"y":{},"mode":"lines","text":{},"hovertemplate":"<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","color":{},"alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"type":"scatter"}},"layout":{"margin":{"b":40,"l":60,"t":25,"r":10},"xaxis":{"domain":[0,1],"automargin":true,"title":"Datum"},"yaxis":{"domain":[0,1],"automargin":true,"title":"Infizierte"},"hovermode":"closest","showlegend":true},"source":"A","config":{"showSendToCloud":false},"data":[{"x":["2020-03-08","2020-03-09","2020-03-10","2020-03-11","2020-03-12","2020-03-13","2020-03-14","2020-03-15","2020-03-16","2020-03-17","2020-03-18","2020-03-19","2020-03-20","2020-03-21","2020-03-22","2020-03-23","2020-03-24","2020-03-25","2020-03-26","2020-03-27","2020-03-28","2020-03-29","2020-03-30"],"y":[199,234,277,367,559,814,1024,1415,1750,2437,2926,3546,4238,4735,5431,6166,7122,8345,9648,10976,12106,12913,13171],"mode":"lines","text":["Baden-Württemberg","Baden-Württemberg","Baden-Württemberg","Baden-Württemberg","Baden-Württemberg","Baden-Württemberg","Baden-Württemberg","Baden-Württemberg","Baden-Württemberg","Baden-Württemberg","Baden-Württemberg","Baden-Württemberg","Baden-Württemberg","Baden-Württemberg","Baden-Württemberg","Baden-Württemberg","Baden-Württemberg","Baden-Württemberg","Baden-Württemberg","Baden-Württemberg","Baden-Württemberg","Baden-Württemberg","Baden-Württemberg"],"hovertemplate":["<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>"],"type":"scatter","name":"Baden-Württemberg","marker":{"color":"rgba(102,194,165,1)","line":{"color":"rgba(102,194,165,1)"}},"textfont":{"color":"rgba(102,194,165,1)"},"error_y":{"color":"rgba(102,194,165,1)"},"error_x":{"color":"rgba(102,194,165,1)"},"line":{"color":"rgba(102,194,165,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["2020-03-08","2020-03-09","2020-03-10","2020-03-11","2020-03-12","2020-03-13","2020-03-14","2020-03-15","2020-03-16","2020-03-17","2020-03-18","2020-03-19","2020-03-20","2020-03-21","2020-03-22","2020-03-23","2020-03-24","2020-03-25","2020-03-26","2020-03-27","2020-03-28","2020-03-29","2020-03-30"],"y":[217,256,315,366,517,661,923,1127,1343,1718,2285,2946,3821,4578,5549,6301,7166,8602,10387,11666,13085,14399,14424],"mode":"lines","text":["Bayern","Bayern","Bayern","Bayern","Bayern","Bayern","Bayern","Bayern","Bayern","Bayern","Bayern","Bayern","Bayern","Bayern","Bayern","Bayern","Bayern","Bayern","Bayern","Bayern","Bayern","Bayern","Bayern"],"hovertemplate":["<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>"],"type":"scatter","name":"Bayern","marker":{"color":"rgba(189,173,133,1)","line":{"color":"rgba(189,173,133,1)"}},"textfont":{"color":"rgba(189,173,133,1)"},"error_y":{"color":"rgba(189,173,133,1)"},"error_x":{"color":"rgba(189,173,133,1)"},"line":{"color":"rgba(189,173,133,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["2020-03-08","2020-03-09","2020-03-10","2020-03-11","2020-03-12","2020-03-13","2020-03-14","2020-03-15","2020-03-16","2020-03-17","2020-03-18","2020-03-19","2020-03-20","2020-03-21","2020-03-22","2020-03-23","2020-03-24","2020-03-25","2020-03-26","2020-03-27","2020-03-28","2020-03-29","2020-03-30"],"y":[40,48,58,90,137,176,263,283,332,383,519,688,868,1025,1071,1219,1425,1645,1937,2152,2337,2462,2462],"mode":"lines","text":["Berlin","Berlin","Berlin","Berlin","Berlin","Berlin","Berlin","Berlin","Berlin","Berlin","Berlin","Berlin","Berlin","Berlin","Berlin","Berlin","Berlin","Berlin","Berlin","Berlin","Berlin","Berlin","Berlin"],"hovertemplate":["<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>"],"type":"scatter","name":"Berlin","marker":{"color":"rgba(245,146,102,1)","line":{"color":"rgba(245,146,102,1)"}},"textfont":{"color":"rgba(245,146,102,1)"},"error_y":{"color":"rgba(245,146,102,1)"},"error_x":{"color":"rgba(245,146,102,1)"},"line":{"color":"rgba(245,146,102,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["2020-03-08","2020-03-09","2020-03-10","2020-03-11","2020-03-12","2020-03-13","2020-03-14","2020-03-15","2020-03-16","2020-03-17","2020-03-18","2020-03-19","2020-03-20","2020-03-21","2020-03-22","2020-03-23","2020-03-24","2020-03-25","2020-03-26","2020-03-27","2020-03-28","2020-03-29","2020-03-30"],"y":[6,8,16,24,31,43,61,87,111,131,206,268,324,380,407,435,486,547,638,746,814,852,861],"mode":"lines","text":["Brandenburg","Brandenburg","Brandenburg","Brandenburg","Brandenburg","Brandenburg","Brandenburg","Brandenburg","Brandenburg","Brandenburg","Brandenburg","Brandenburg","Brandenburg","Brandenburg","Brandenburg","Brandenburg","Brandenburg","Brandenburg","Brandenburg","Brandenburg","Brandenburg","Brandenburg","Brandenburg"],"hovertemplate":["<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>"],"type":"scatter","name":"Brandenburg","marker":{"color":"rgba(217,150,141,1)","line":{"color":"rgba(217,150,141,1)"}},"textfont":{"color":"rgba(217,150,141,1)"},"error_y":{"color":"rgba(217,150,141,1)"},"error_x":{"color":"rgba(217,150,141,1)"},"line":{"color":"rgba(217,150,141,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["2020-03-08","2020-03-09","2020-03-10","2020-03-11","2020-03-12","2020-03-13","2020-03-14","2020-03-15","2020-03-16","2020-03-17","2020-03-18","2020-03-19","2020-03-20","2020-03-21","2020-03-22","2020-03-23","2020-03-24","2020-03-25","2020-03-26","2020-03-27","2020-03-28","2020-03-29","2020-03-30"],"y":[4,4,22,32,42,48,53,56,57,66,75,119,127,168,173,175,195,212,244,263,278,290,290],"mode":"lines","text":["Bremen","Bremen","Bremen","Bremen","Bremen","Bremen","Bremen","Bremen","Bremen","Bremen","Bremen","Bremen","Bremen","Bremen","Bremen","Bremen","Bremen","Bremen","Bremen","Bremen","Bremen","Bremen","Bremen"],"hovertemplate":["<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>"],"type":"scatter","name":"Bremen","marker":{"color":"rgba(162,158,189,1)","line":{"color":"rgba(162,158,189,1)"}},"textfont":{"color":"rgba(162,158,189,1)"},"error_y":{"color":"rgba(162,158,189,1)"},"error_x":{"color":"rgba(162,158,189,1)"},"line":{"color":"rgba(162,158,189,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["2020-03-08","2020-03-09","2020-03-10","2020-03-11","2020-03-12","2020-03-13","2020-03-14","2020-03-15","2020-03-16","2020-03-17","2020-03-18","2020-03-19","2020-03-20","2020-03-21","2020-03-22","2020-03-23","2020-03-24","2020-03-25","2020-03-26","2020-03-27","2020-03-28","2020-03-29","2020-03-30"],"y":[17,22,35,54,88,123,158,196,260,312,414,506,664,768,887,989,1237,1450,1614,1759,1985,2078,2078],"mode":"lines","text":["Hamburg","Hamburg","Hamburg","Hamburg","Hamburg","Hamburg","Hamburg","Hamburg","Hamburg","Hamburg","Hamburg","Hamburg","Hamburg","Hamburg","Hamburg","Hamburg","Hamburg","Hamburg","Hamburg","Hamburg","Hamburg","Hamburg","Hamburg"],"hovertemplate":["<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>"],"type":"scatter","name":"Hamburg","marker":{"color":"rgba(175,154,200,1)","line":{"color":"rgba(175,154,200,1)"}},"textfont":{"color":"rgba(175,154,200,1)"},"error_y":{"color":"rgba(175,154,200,1)"},"error_x":{"color":"rgba(175,154,200,1)"},"line":{"color":"rgba(175,154,200,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["2020-03-08","2020-03-09","2020-03-10","2020-03-11","2020-03-12","2020-03-13","2020-03-14","2020-03-15","2020-03-16","2020-03-17","2020-03-18","2020-03-19","2020-03-20","2020-03-21","2020-03-22","2020-03-23","2020-03-24","2020-03-25","2020-03-26","2020-03-27","2020-03-28","2020-03-29","2020-03-30"],"y":[21,26,39,51,104,166,230,318,388,497,654,901,1153,1327,1480,1602,1805,2032,2332,2587,2946,3141,3141],"mode":"lines","text":["Hessen","Hessen","Hessen","Hessen","Hessen","Hessen","Hessen","Hessen","Hessen","Hessen","Hessen","Hessen","Hessen","Hessen","Hessen","Hessen","Hessen","Hessen","Hessen","Hessen","Hessen","Hessen","Hessen"],"hovertemplate":["<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>"],"type":"scatter","name":"Hessen","marker":{"color":"rgba(215,144,197,1)","line":{"color":"rgba(215,144,197,1)"}},"textfont":{"color":"rgba(215,144,197,1)"},"error_y":{"color":"rgba(215,144,197,1)"},"error_x":{"color":"rgba(215,144,197,1)"},"line":{"color":"rgba(215,144,197,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["2020-03-08","2020-03-09","2020-03-10","2020-03-11","2020-03-12","2020-03-13","2020-03-14","2020-03-15","2020-03-16","2020-03-17","2020-03-18","2020-03-19","2020-03-20","2020-03-21","2020-03-22","2020-03-23","2020-03-24","2020-03-25","2020-03-26","2020-03-27","2020-03-28","2020-03-29","2020-03-30"],"y":[8,10,14,17,23,33,45,50,51,69,109,143,167,182,187,202,227,246,268,310,348,361,361],"mode":"lines","text":["Mecklenburg-Vorpommern","Mecklenburg-Vorpommern","Mecklenburg-Vorpommern","Mecklenburg-Vorpommern","Mecklenburg-Vorpommern","Mecklenburg-Vorpommern","Mecklenburg-Vorpommern","Mecklenburg-Vorpommern","Mecklenburg-Vorpommern","Mecklenburg-Vorpommern","Mecklenburg-Vorpommern","Mecklenburg-Vorpommern","Mecklenburg-Vorpommern","Mecklenburg-Vorpommern","Mecklenburg-Vorpommern","Mecklenburg-Vorpommern","Mecklenburg-Vorpommern","Mecklenburg-Vorpommern","Mecklenburg-Vorpommern","Mecklenburg-Vorpommern","Mecklenburg-Vorpommern","Mecklenburg-Vorpommern","Mecklenburg-Vorpommern"],"hovertemplate":["<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>"],"type":"scatter","name":"Mecklenburg-Vorpommern","marker":{"color":"rgba(219,162,168,1)","line":{"color":"rgba(219,162,168,1)"}},"textfont":{"color":"rgba(219,162,168,1)"},"error_y":{"color":"rgba(219,162,168,1)"},"error_x":{"color":"rgba(219,162,168,1)"},"line":{"color":"rgba(219,162,168,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["2020-03-08","2020-03-09","2020-03-10","2020-03-11","2020-03-12","2020-03-13","2020-03-14","2020-03-15","2020-03-16","2020-03-17","2020-03-18","2020-03-19","2020-03-20","2020-03-21","2020-03-22","2020-03-23","2020-03-24","2020-03-25","2020-03-26","2020-03-27","2020-03-28","2020-03-29","2020-03-30"],"y":[33,42,66,79,148,229,341,436,564,729,967,1260,1505,1684,1840,2020,2268,2651,3054,3435,3746,4008,4021],"mode":"lines","text":["Niedersachsen","Niedersachsen","Niedersachsen","Niedersachsen","Niedersachsen","Niedersachsen","Niedersachsen","Niedersachsen","Niedersachsen","Niedersachsen","Niedersachsen","Niedersachsen","Niedersachsen","Niedersachsen","Niedersachsen","Niedersachsen","Niedersachsen","Niedersachsen","Niedersachsen","Niedersachsen","Niedersachsen","Niedersachsen","Niedersachsen"],"hovertemplate":["<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>"],"type":"scatter","name":"Niedersachsen","marker":{"color":"rgba(189,198,118,1)","line":{"color":"rgba(189,198,118,1)"}},"textfont":{"color":"rgba(189,198,118,1)"},"error_y":{"color":"rgba(189,198,118,1)"},"error_x":{"color":"rgba(189,198,118,1)"},"line":{"color":"rgba(189,198,118,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["2020-03-08","2020-03-09","2020-03-10","2020-03-11","2020-03-12","2020-03-13","2020-03-14","2020-03-15","2020-03-16","2020-03-17","2020-03-18","2020-03-19","2020-03-20","2020-03-21","2020-03-22","2020-03-23","2020-03-24","2020-03-25","2020-03-26","2020-03-27","2020-03-28","2020-03-29","2020-03-30"],"y":[484,545,641,801,1182,1618,2027,2557,3104,3976,4853,5712,6806,7524,8182,8783,9534,10508,11637,12587,13513,14261,14308],"mode":"lines","text":["Nordrhein-Westfalen","Nordrhein-Westfalen","Nordrhein-Westfalen","Nordrhein-Westfalen","Nordrhein-Westfalen","Nordrhein-Westfalen","Nordrhein-Westfalen","Nordrhein-Westfalen","Nordrhein-Westfalen","Nordrhein-Westfalen","Nordrhein-Westfalen","Nordrhein-Westfalen","Nordrhein-Westfalen","Nordrhein-Westfalen","Nordrhein-Westfalen","Nordrhein-Westfalen","Nordrhein-Westfalen","Nordrhein-Westfalen","Nordrhein-Westfalen","Nordrhein-Westfalen","Nordrhein-Westfalen","Nordrhein-Westfalen","Nordrhein-Westfalen"],"hovertemplate":["<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>"],"type":"scatter","name":"Nordrhein-Westfalen","marker":{"color":"rgba(186,217,78,1)","line":{"color":"rgba(186,217,78,1)"}},"textfont":{"color":"rgba(186,217,78,1)"},"error_y":{"color":"rgba(186,217,78,1)"},"error_x":{"color":"rgba(186,217,78,1)"},"line":{"color":"rgba(186,217,78,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["2020-03-08","2020-03-09","2020-03-10","2020-03-11","2020-03-12","2020-03-13","2020-03-14","2020-03-15","2020-03-16","2020-03-17","2020-03-18","2020-03-19","2020-03-20","2020-03-21","2020-03-22","2020-03-23","2020-03-24","2020-03-25","2020-03-26","2020-03-27","2020-03-28","2020-03-29","2020-03-30"],"y":[19,22,24,39,52,110,172,215,401,558,705,874,1047,1215,1334,1497,1733,1904,2105,2336,2528,2700,2768],"mode":"lines","text":["Rheinland-Pfalz","Rheinland-Pfalz","Rheinland-Pfalz","Rheinland-Pfalz","Rheinland-Pfalz","Rheinland-Pfalz","Rheinland-Pfalz","Rheinland-Pfalz","Rheinland-Pfalz","Rheinland-Pfalz","Rheinland-Pfalz","Rheinland-Pfalz","Rheinland-Pfalz","Rheinland-Pfalz","Rheinland-Pfalz","Rheinland-Pfalz","Rheinland-Pfalz","Rheinland-Pfalz","Rheinland-Pfalz","Rheinland-Pfalz","Rheinland-Pfalz","Rheinland-Pfalz","Rheinland-Pfalz"],"hovertemplate":["<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>"],"type":"scatter","name":"Rheinland-Pfalz","marker":{"color":"rgba(227,217,62,1)","line":{"color":"rgba(227,217,62,1)"}},"textfont":{"color":"rgba(227,217,62,1)"},"error_y":{"color":"rgba(227,217,62,1)"},"error_x":{"color":"rgba(227,217,62,1)"},"line":{"color":"rgba(227,217,62,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["2020-03-08","2020-03-09","2020-03-10","2020-03-11","2020-03-12","2020-03-13","2020-03-14","2020-03-15","2020-03-16","2020-03-17","2020-03-18","2020-03-19","2020-03-20","2020-03-21","2020-03-22","2020-03-23","2020-03-24","2020-03-25","2020-03-26","2020-03-27","2020-03-28","2020-03-29","2020-03-30"],"y":[4,6,7,14,29,35,39,74,99,115,172,230,268,301,327,402,437,466,540,614,669,738,778],"mode":"lines","text":["Saarland","Saarland","Saarland","Saarland","Saarland","Saarland","Saarland","Saarland","Saarland","Saarland","Saarland","Saarland","Saarland","Saarland","Saarland","Saarland","Saarland","Saarland","Saarland","Saarland","Saarland","Saarland","Saarland"],"hovertemplate":["<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>"],"type":"scatter","name":"Saarland","marker":{"color":"rgba(252,214,66,1)","line":{"color":"rgba(252,214,66,1)"}},"textfont":{"color":"rgba(252,214,66,1)"},"error_y":{"color":"rgba(252,214,66,1)"},"error_x":{"color":"rgba(252,214,66,1)"},"line":{"color":"rgba(252,214,66,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["2020-03-08","2020-03-09","2020-03-10","2020-03-11","2020-03-12","2020-03-13","2020-03-14","2020-03-15","2020-03-16","2020-03-17","2020-03-18","2020-03-19","2020-03-20","2020-03-21","2020-03-22","2020-03-23","2020-03-24","2020-03-25","2020-03-26","2020-03-27","2020-03-28","2020-03-29","2020-03-30"],"y":[10,12,25,29,49,77,102,143,163,250,318,430,595,731,839,943,1047,1205,1350,1559,1757,1884,1983],"mode":"lines","text":["Sachsen","Sachsen","Sachsen","Sachsen","Sachsen","Sachsen","Sachsen","Sachsen","Sachsen","Sachsen","Sachsen","Sachsen","Sachsen","Sachsen","Sachsen","Sachsen","Sachsen","Sachsen","Sachsen","Sachsen","Sachsen","Sachsen","Sachsen"],"hovertemplate":["<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>"],"type":"scatter","name":"Sachsen","marker":{"color":"rgba(241,204,114,1)","line":{"color":"rgba(241,204,114,1)"}},"textfont":{"color":"rgba(241,204,114,1)"},"error_y":{"color":"rgba(241,204,114,1)"},"error_x":{"color":"rgba(241,204,114,1)"},"line":{"color":"rgba(241,204,114,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["2020-03-08","2020-03-09","2020-03-10","2020-03-11","2020-03-12","2020-03-13","2020-03-14","2020-03-15","2020-03-16","2020-03-17","2020-03-18","2020-03-19","2020-03-20","2020-03-21","2020-03-22","2020-03-23","2020-03-24","2020-03-25","2020-03-26","2020-03-27","2020-03-28","2020-03-29","2020-03-30"],"y":[1,1,8,19,31,39,49,59,86,108,151,193,242,274,302,368,406,478,534,586,629,682,709],"mode":"lines","text":["Sachsen-Anhalt","Sachsen-Anhalt","Sachsen-Anhalt","Sachsen-Anhalt","Sachsen-Anhalt","Sachsen-Anhalt","Sachsen-Anhalt","Sachsen-Anhalt","Sachsen-Anhalt","Sachsen-Anhalt","Sachsen-Anhalt","Sachsen-Anhalt","Sachsen-Anhalt","Sachsen-Anhalt","Sachsen-Anhalt","Sachsen-Anhalt","Sachsen-Anhalt","Sachsen-Anhalt","Sachsen-Anhalt","Sachsen-Anhalt","Sachsen-Anhalt","Sachsen-Anhalt","Sachsen-Anhalt"],"hovertemplate":["<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>"],"type":"scatter","name":"Sachsen-Anhalt","marker":{"color":"rgba(226,195,150,1)","line":{"color":"rgba(226,195,150,1)"}},"textfont":{"color":"rgba(226,195,150,1)"},"error_y":{"color":"rgba(226,195,150,1)"},"error_x":{"color":"rgba(226,195,150,1)"},"line":{"color":"rgba(226,195,150,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["2020-03-08","2020-03-09","2020-03-10","2020-03-11","2020-03-12","2020-03-13","2020-03-14","2020-03-15","2020-03-16","2020-03-17","2020-03-18","2020-03-19","2020-03-20","2020-03-21","2020-03-22","2020-03-23","2020-03-24","2020-03-25","2020-03-26","2020-03-27","2020-03-28","2020-03-29","2020-03-30"],"y":[9,12,14,29,35,48,74,111,137,151,235,276,359,405,455,503,598,660,754,864,953,1021,1055],"mode":"lines","text":["Schleswig-Holstein","Schleswig-Holstein","Schleswig-Holstein","Schleswig-Holstein","Schleswig-Holstein","Schleswig-Holstein","Schleswig-Holstein","Schleswig-Holstein","Schleswig-Holstein","Schleswig-Holstein","Schleswig-Holstein","Schleswig-Holstein","Schleswig-Holstein","Schleswig-Holstein","Schleswig-Holstein","Schleswig-Holstein","Schleswig-Holstein","Schleswig-Holstein","Schleswig-Holstein","Schleswig-Holstein","Schleswig-Holstein","Schleswig-Holstein","Schleswig-Holstein"],"hovertemplate":["<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>"],"type":"scatter","name":"Schleswig-Holstein","marker":{"color":"rgba(204,187,165,1)","line":{"color":"rgba(204,187,165,1)"}},"textfont":{"color":"rgba(204,187,165,1)"},"error_y":{"color":"rgba(204,187,165,1)"},"error_x":{"color":"rgba(204,187,165,1)"},"line":{"color":"rgba(204,187,165,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["2020-03-08","2020-03-09","2020-03-10","2020-03-11","2020-03-12","2020-03-13","2020-03-14","2020-03-15","2020-03-16","2020-03-17","2020-03-18","2020-03-19","2020-03-20","2020-03-21","2020-03-22","2020-03-23","2020-03-24","2020-03-25","2020-03-26","2020-03-27","2020-03-28","2020-03-29","2020-03-30"],"y":[2,2,8,11,18,32,43,55,73,88,118,165,233,257,314,379,430,483,569,672,718,760,785],"mode":"lines","text":["Thüringen","Thüringen","Thüringen","Thüringen","Thüringen","Thüringen","Thüringen","Thüringen","Thüringen","Thüringen","Thüringen","Thüringen","Thüringen","Thüringen","Thüringen","Thüringen","Thüringen","Thüringen","Thüringen","Thüringen","Thüringen","Thüringen","Thüringen"],"hovertemplate":["<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>","<b>%{text}<\/b><br> %{yaxis.title.text}: %{y:d}<br> %{xaxis.title.text}: %{x} <extra><\/extra>"],"type":"scatter","name":"Thüringen","marker":{"color":"rgba(179,179,179,1)","line":{"color":"rgba(179,179,179,1)"}},"textfont":{"color":"rgba(179,179,179,1)"},"error_y":{"color":"rgba(179,179,179,1)"},"error_x":{"color":"rgba(179,179,179,1)"},"line":{"color":"rgba(179,179,179,1)"},"xaxis":"x","yaxis":"y","frame":null}],"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.2,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
+<p class="caption">
+Figure 1: Infizierte pro Tag in den Bundesländern
+</p>
+</div>
+</div>
+<p>Dann könnten wir beispielhaft noch ein horizontales Balkendiagramm mit den aktuellsten Zahlen im Verhältnis zu den Einwohnern in den Bundesländern generieren.</p>
+<div class="layout-chunk" data-layout="l-body-outset">
+<pre class="r"><code>
+pro1000plot &lt;- landdata %&gt;% 
+                  # nur Zeilen mit dem &quot;größten&quot; Datum auswählen
+                  filter(Datum == max(Datum)) %&gt;% 
+                  # Eine Spalte mit pro 1000 Einwohner berechnen
+                  mutate(pro1000 = Infizierte / Bevoelkerung *1000) %&gt;% 
+                  arrange(pro1000) %&gt;% 
+                  plot_ly(x = ~pro1000, y = ~Bundesland,
+                          type = &#39;bar&#39;, color = ~pro1000,
+                          # horizontal, mit Farben aus &#39;RColorBrewer&#39;
+                          colors = &quot;YlOrRd&quot;, orientation = &#39;h&#39;,
+                          text = ~Bundesland,
+                          hovertemplate = paste(&quot;&lt;b&gt;%{text}&lt;/b&gt;&lt;br&gt;&quot;,
+                                                &quot;%{x:.2f} %{xaxis.title.text}&quot;,
+                                                &quot;&lt;extra&gt;&lt;/extra&gt;&quot;)) %&gt;% 
+                  # Balken nach größe sortieren und die Labels umnennen
+                  layout(yaxis = list(categoryorder = &quot;array&quot;, categoryarray = ~pro1000,
+                                      title = &quot;Bundesland&quot;),
+                         xaxis = list(title = paste0(&quot;Infizierte pro 1000 Einwohner &quot;, &quot;(&quot;, 
+                                                     format(max(landdata$Datum), &quot;%d.%m.%Y&quot;), &quot;)&quot;))
+                         ) %&gt;%
+                  # Legende ausblenden
+                  hide_colorbar()
+
+pro1000plot</code></pre>
+<div class="figure" style="text-align: center"><span id="fig:unnamed-chunk-8"></span>
+<div id="htmlwidget-7eb88773d2efecb1fa05" style="width:624px;height:480px;" class="plotly html-widget"></div>
+<script type="application/json" data-for="htmlwidget-7eb88773d2efecb1fa05">{"x":{"visdat":{"64681891ce0":["function () ","plotlyVisDat"]},"cur_data":"64681891ce0","attrs":{"64681891ce0":{"x":{},"y":{},"orientation":"h","text":{},"hovertemplate":"<b>%{text}<\/b><br> %{x:.2f} %{xaxis.title.text} <extra><\/extra>","color":{},"colors":"YlOrRd","alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"type":"bar"}},"layout":{"margin":{"b":40,"l":60,"t":25,"r":10},"yaxis":{"domain":[0,1],"automargin":true,"categoryorder":"array","categoryarray":[0.224268874151614,0.321058396854443,0.342766102542401,0.364206037742102,0.366284129165315,0.42460606805996,0.486275290667806,0.501292011933335,0.503730184023748,0.675478061229809,0.677626856741653,0.785454751042141,0.797874223950491,1.1030288097452,1.12862464757636,1.18984242605357],"title":"Bundesland","type":"category"},"xaxis":{"domain":[0,1],"automargin":true,"title":"Infizierte pro 1000 Einwohner (30.03.2020)"},"hovermode":"closest","showlegend":false,"legend":{"yanchor":"top","y":0.5}},"source":"A","config":{"showSendToCloud":false},"data":[{"x":[0.224268874151614,0.321058396854443,0.342766102542401,0.364206037742102,0.366284129165315,0.42460606805996,0.486275290667806,0.501292011933335,0.503730184023748,0.675478061229809,0.677626856741653,0.785454751042141,0.797874223950491,1.1030288097452,1.12862464757636,1.18984242605357],"y":["Mecklenburg-Vorpommern","Sachsen-Anhalt","Brandenburg","Schleswig-Holstein","Thüringen","Bremen","Sachsen","Hessen","Niedersachsen","Berlin","Rheinland-Pfalz","Saarland","Nordrhein-Westfalen","Bayern","Hamburg","Baden-Württemberg"],"orientation":"h","text":["Mecklenburg-Vorpommern","Sachsen-Anhalt","Brandenburg","Schleswig-Holstein","Thüringen","Bremen","Sachsen","Hessen","Niedersachsen","Berlin","Rheinland-Pfalz","Saarland","Nordrhein-Westfalen","Bayern","Hamburg","Baden-Württemberg"],"hovertemplate":["<b>%{text}<\/b><br> %{x:.2f} %{xaxis.title.text} <extra><\/extra>","<b>%{text}<\/b><br> %{x:.2f} %{xaxis.title.text} <extra><\/extra>","<b>%{text}<\/b><br> %{x:.2f} %{xaxis.title.text} <extra><\/extra>","<b>%{text}<\/b><br> %{x:.2f} %{xaxis.title.text} <extra><\/extra>","<b>%{text}<\/b><br> %{x:.2f} %{xaxis.title.text} <extra><\/extra>","<b>%{text}<\/b><br> %{x:.2f} %{xaxis.title.text} <extra><\/extra>","<b>%{text}<\/b><br> %{x:.2f} %{xaxis.title.text} <extra><\/extra>","<b>%{text}<\/b><br> %{x:.2f} %{xaxis.title.text} <extra><\/extra>","<b>%{text}<\/b><br> %{x:.2f} %{xaxis.title.text} <extra><\/extra>","<b>%{text}<\/b><br> %{x:.2f} %{xaxis.title.text} <extra><\/extra>","<b>%{text}<\/b><br> %{x:.2f} %{xaxis.title.text} <extra><\/extra>","<b>%{text}<\/b><br> %{x:.2f} %{xaxis.title.text} <extra><\/extra>","<b>%{text}<\/b><br> %{x:.2f} %{xaxis.title.text} <extra><\/extra>","<b>%{text}<\/b><br> %{x:.2f} %{xaxis.title.text} <extra><\/extra>","<b>%{text}<\/b><br> %{x:.2f} %{xaxis.title.text} <extra><\/extra>","<b>%{text}<\/b><br> %{x:.2f} %{xaxis.title.text} <extra><\/extra>"],"type":"bar","marker":{"colorbar":{"title":"pro1000","ticklen":2},"cmin":0.224268874151614,"cmax":1.18984242605357,"colorscale":[["0","rgba(255,255,204,1)"],["0.0416666666666667","rgba(255,249,189,1)"],["0.0833333333333333","rgba(255,243,175,1)"],["0.125","rgba(255,237,160,1)"],["0.166666666666667","rgba(255,230,146,1)"],["0.208333333333333","rgba(255,224,132,1)"],["0.25","rgba(254,217,118,1)"],["0.291666666666667","rgba(255,204,104,1)"],["0.333333333333333","rgba(255,191,90,1)"],["0.375","rgba(254,178,76,1)"],["0.416666666666667","rgba(254,166,71,1)"],["0.458333333333333","rgba(254,154,65,1)"],["0.5","rgba(253,141,60,1)"],["0.541666666666667","rgba(253,122,54,1)"],["0.583333333333333","rgba(253,102,48,1)"],["0.625","rgba(252,78,42,1)"],["0.666666666666667","rgba(244,64,37,1)"],["0.708333333333333","rgba(235,48,33,1)"],["0.75","rgba(227,26,28,1)"],["0.791666666666667","rgba(214,18,32,1)"],["0.833333333333333","rgba(202,9,35,1)"],["0.875","rgba(189,0,38,1)"],["0.916666666666667","rgba(168,0,38,1)"],["0.958333333333333","rgba(148,0,38,1)"],["1","rgba(128,0,38,1)"]],"showscale":false,"color":[0.224268874151614,0.321058396854443,0.342766102542401,0.364206037742102,0.366284129165315,0.42460606805996,0.486275290667806,0.501292011933335,0.503730184023748,0.675478061229809,0.677626856741653,0.785454751042141,0.797874223950491,1.1030288097452,1.12862464757636,1.18984242605357],"line":{"colorbar":{"title":"","ticklen":2},"cmin":0.224268874151614,"cmax":1.18984242605357,"colorscale":[["0","rgba(255,255,204,1)"],["0.0416666666666667","rgba(255,249,189,1)"],["0.0833333333333333","rgba(255,243,175,1)"],["0.125","rgba(255,237,160,1)"],["0.166666666666667","rgba(255,230,146,1)"],["0.208333333333333","rgba(255,224,132,1)"],["0.25","rgba(254,217,118,1)"],["0.291666666666667","rgba(255,204,104,1)"],["0.333333333333333","rgba(255,191,90,1)"],["0.375","rgba(254,178,76,1)"],["0.416666666666667","rgba(254,166,71,1)"],["0.458333333333333","rgba(254,154,65,1)"],["0.5","rgba(253,141,60,1)"],["0.541666666666667","rgba(253,122,54,1)"],["0.583333333333333","rgba(253,102,48,1)"],["0.625","rgba(252,78,42,1)"],["0.666666666666667","rgba(244,64,37,1)"],["0.708333333333333","rgba(235,48,33,1)"],["0.75","rgba(227,26,28,1)"],["0.791666666666667","rgba(214,18,32,1)"],["0.833333333333333","rgba(202,9,35,1)"],["0.875","rgba(189,0,38,1)"],["0.916666666666667","rgba(168,0,38,1)"],["0.958333333333333","rgba(148,0,38,1)"],["1","rgba(128,0,38,1)"]],"showscale":false,"color":[0.224268874151614,0.321058396854443,0.342766102542401,0.364206037742102,0.366284129165315,0.42460606805996,0.486275290667806,0.501292011933335,0.503730184023748,0.675478061229809,0.677626856741653,0.785454751042141,0.797874223950491,1.1030288097452,1.12862464757636,1.18984242605357]}},"xaxis":"x","yaxis":"y","frame":null},{"x":[0.224268874151614,1.18984242605357],"y":["Baden-Württemberg","Thüringen"],"type":"scatter","mode":"markers","opacity":0,"hoverinfo":"none","showlegend":false,"marker":{"colorbar":{"title":"pro1000","ticklen":2,"len":0.5,"lenmode":"fraction","y":1,"yanchor":"top"},"cmin":0.224268874151614,"cmax":1.18984242605357,"colorscale":[["0","rgba(255,255,204,1)"],["0.0416666666666667","rgba(255,249,189,1)"],["0.0833333333333333","rgba(255,243,175,1)"],["0.125","rgba(255,237,160,1)"],["0.166666666666667","rgba(255,230,146,1)"],["0.208333333333333","rgba(255,224,132,1)"],["0.25","rgba(254,217,118,1)"],["0.291666666666667","rgba(255,204,104,1)"],["0.333333333333333","rgba(255,191,90,1)"],["0.375","rgba(254,178,76,1)"],["0.416666666666667","rgba(254,166,71,1)"],["0.458333333333333","rgba(254,154,65,1)"],["0.5","rgba(253,141,60,1)"],["0.541666666666667","rgba(253,122,54,1)"],["0.583333333333333","rgba(253,102,48,1)"],["0.625","rgba(252,78,42,1)"],["0.666666666666667","rgba(244,64,37,1)"],["0.708333333333333","rgba(235,48,33,1)"],["0.75","rgba(227,26,28,1)"],["0.791666666666667","rgba(214,18,32,1)"],["0.833333333333333","rgba(202,9,35,1)"],["0.875","rgba(189,0,38,1)"],["0.916666666666667","rgba(168,0,38,1)"],["0.958333333333333","rgba(148,0,38,1)"],["1","rgba(128,0,38,1)"]],"showscale":false,"color":[0.224268874151614,1.18984242605357],"line":{"color":"rgba(255,127,14,1)"}},"xaxis":"x","yaxis":"y","frame":null}],"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.2,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
+<p class="caption">
+Figure 2: Infizierte pro 1000 Einwohner (28.03.2020)
+</p>
+</div>
+</div>
+<h1 id="webapplikation-mit-shiny-entwickeln">Webapplikation mit Shiny entwickeln</h1>
+<p>Das Problem mit diesen Diagrammen ist aber, dass sie hier nicht aktualisiert werden können, da diese Webseite statisch ist. Um das zu ermöglichen, braucht man eine Webapplikation mit <a href="https://shiny.rstudio.com">Shiny</a> zu bauen und das dann auf einem Server laufen zu lassen. Ich zeige hier nur eine <em>sehr</em> einfache Variante von einer Applikation, aber auch der Code für das “fertige Produkt” ist auf meinem <a href="https://github.com/ek-g/shiny-server/blob/master/covid19de/app.R">GitHub</a> verfügbar. Die Bausteine für eine Shiny-Applikation sind <code>server</code> und <code>ui</code>.</p>
+<h2 id="ui">UI</h2>
+<p>Erst müssen wir entscheiden, was wir eigentlich den Benutzern zeigen möchten. Da es ein Dashboard werden sollte, nutze ich hier die <a href="https://rstudio.github.io/shinydashboard/">Shinydashboard</a>-Erweiterung für die Benutzeroberfläche, die aus drei Elementen besteht: <code>Header</code>, <code>Sidebar</code> und <code>Body</code>.</p>
+<div class="layout-chunk" data-layout="l-body">
+<pre class="r"><code>
+ui &lt;- dashboardPage(
+              dashboardHeader(&lt;hier kommt unser Titel&gt;),
+              dashboardSidebar(&lt;hier die Navigation),
+              dashboardBody(&lt;und hier der Inhalt&gt;)
+)</code></pre>
+</div>
+<p>Eine Navigation brauche ich für dieses Beispiel erst mal nicht, aber die anderen Elemente schon. Ich nehmen also die Outputs von den Diagrammen und bringe sie auf zwei dynamischen Spalten an, innerhalb einer dynamischen Zeile. Damit kann die Benutzeroberfläche an die Auflösung bzw. Größe des Endgeräts angepasst werden.</p>
+<div class="layout-chunk" data-layout="l-body">
+<pre class="r"><code>
+ui &lt;- dashboardPage(
+              dashboardHeader(&lt;titel = &quot;Covid-19&quot;),
+              dashboardSidebar(),
+              dashboardBody(fluidRow(
+                                  column(width = 8,
+                                         box(plotlyOutput(&quot;plot&quot;),
+                                             width = NULL)
+                                        ),
+                                  column(width = 4,
+                                         box(plotlyOutput(&quot;pro1000plot&quot;),
+                                             width = NULL)
+                                         )
+                                    )
+                            )
+                    )</code></pre>
+</div>
+<h2 id="server">Server</h2>
+<p>Auf der “Serverseite” müssen wir nur dafür sorgen, dass die Daten herunterladen und die Diagramme generiert werden. Das heißt wir müssen nur unseren Code von vorher kopieren und die Ergebnisse zu den richtigen Outputs mit der Funktion <code>renderPlotly()</code> steuern.</p>
+<div class="layout-chunk" data-layout="l-body">
+<pre class="r"><code>
+server &lt;- function(input, output) {
+  
+          # Zum Beispiel hier könnte man die Daten einlesen
+          
+          output$plot &lt;- renderPlotly({
+            
+          landdata %&gt;% 
+                plot_ly(x =  ~ Datum,
+                        y =  ~ Infizierte,
+                        color =  ~ Bundesland,
+                        type = &#39;scatter&#39;,
+                        mode = &#39;lines&#39;,
+                        text = ~ Bundesland,
+                        hovertemplate = paste(&quot;&lt;b&gt;%{text}&lt;/b&gt;&lt;br&gt;&quot;,
+                                              &quot;%{yaxis.title.text}: %{y:d}&lt;br&gt;&quot;,
+                                              &quot;%{xaxis.title.text}: %{x}&quot;,
+                                              &quot;&lt;extra&gt;&lt;/extra&gt;&quot;)
+                        )  
+            
+          })
+          
+          output$pro1000plot &lt;- renderPlotly({
+            
+          landdata %&gt;% 
+                  filter(Datum == max(Datum)) %&gt;% 
+                  mutate(pro1000 = Infizierte / Bevoelkerung *1000) %&gt;% 
+                  arrange(pro1000) %&gt;% 
+                  plot_ly(x = ~pro1000, y = ~Bundesland,
+                          type = &#39;bar&#39;, color = ~pro1000,
+                          colors = &quot;YlOrRd&quot;, orientation = &#39;h&#39;,
+                          text = ~Bundesland,
+                          hovertemplate = paste(&quot;&lt;b&gt;%{text}&lt;/b&gt;&lt;br&gt;&quot;,
+                                                &quot;%{x:.2f} %{xaxis.title.text}&quot;,
+                                                &quot;&lt;extra&gt;&lt;/extra&gt;&quot;)) %&gt;% 
+                  layout(yaxis = list(categoryorder = &quot;array&quot;,
+                                      categoryarray = ~pro1000,
+                                      title = &quot;Bundesland&quot;),
+                         xaxis = list(title = paste0(&quot;Infizierte pro 1000 Einwohner &quot;,
+                                                     &quot;(&quot;, 
+                                                     format(max(landdata$Datum),
+                                                            &quot;%d.%m.%Y&quot;), 
+                                                     &quot;)&quot;))
+                         ) %&gt;%
+                  hide_colorbar()  
+            
+          })
+  
+  
+}</code></pre>
+</div>
+<h2 id="fertiges-dasboard">Fertiges Dasboard</h2>
+<p>Letztlich bleibt nur noch übrig die App mit <code>shinyApp(ui, server)</code> zu starten. Nach ein paar Schönheitsreparaturen und einigen weiteren Funktionen könnte die App aussehen wie in Abbildung <a href="#fig:fertig">3</a>. Den noch ziemlich primitiven<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a> Quellentext dieser App findet ihr auf meinem <a href="https://github.com/ek-g/shiny-server/blob/master/covid19de/app.R">GitHub</a>.</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="figure" style="text-align: center"><span id="fig:fertig"></span>
+<img src="preview.png" alt="Fertiges Dashboard" width="750" />
+<p class="caption">
+Figure 3: Fertiges Dashboard
+</p>
+</div>
+</div>
+<p>Mit den gleichen Prinzipien könnte man z.B. eine sich automatisch aktualisierende Auswertung einer Umfrage erstellen, die mit Google Forms durchgeführt werden. Auch schreiben auf Google Tabellen ist möglich. Wenn also die Formeln nicht genug Funktionen anbieten oder zu komplex werden, kann man die Daten mit R bearbeiten und dann zurück auf Google Tabellen speichern. Das sind beiden Funktionen, die ich in einem kommenden Projekt benötigen werde, was auch der Hauptgrund für diese kleine Übung war. Vielen Dank fürs Lesen!</p>
+<section class="footnotes">
+<hr />
+<ol>
+<li id="fn1"><p>Es kann z.B. nicht mit Fehlern umgehen. Das heißt wenn die Verbindung zur Google Tabellen nicht hergestellt werden kann, startet die App einfach nicht.<a href="#fnref1" class="footnote-back">↩</a></p></li>
+</ol>
+</section>
+<!--radix_placeholder_article_footer-->
+<div class="article-footer">
+  <p class="social_footer">
+    <span class="article-sharing">
+      Share: &nbsp;
+      <a href="https://twitter.com/share?text=DIY%20Covid-19-Dashboard%20mit%20R%20und%20Shiny&amp;url=https%3A%2F%2Fblog.kuusisto.de%2Fposts%2F2020-03-30-diy-covid-19-dashboard%2F">
+        <i class="fab fa-twitter"></i>
+      </a>
+      <a href="https://www.linkedin.com/shareArticle?mini=true&amp;url=https%3A%2F%2Fblog.kuusisto.de%2Fposts%2F2020-03-30-diy-covid-19-dashboard%2F&amp;title=DIY%20Covid-19-Dashboard%20mit%20R%20und%20Shiny">
+        <i class="fab fa-linkedin"></i>
+      </a>
+      <a href="https://www.facebook.com/sharer/sharer.php?s=100&amp;p[url]=https%3A%2F%2Fblog.kuusisto.de%2Fposts%2F2020-03-30-diy-covid-19-dashboard%2F">
+        <i class="fab fa-facebook"></i>
+      </a>
+    </span>
+  </p>
+</div>
+<!--/radix_placeholder_article_footer-->
+</div>
+
+<div class="d-appendix">
+</div>
+
+
+<!--radix_placeholder_site_after_body-->
+<!--/radix_placeholder_site_after_body-->
+<!--radix_placeholder_appendices-->
+<div class="appendix-bottom"></div>
+<!--/radix_placeholder_appendices-->
+<!--radix_placeholder_navigation_after_body-->
+<div class="distill-site-nav distill-site-footer">
+  <p>
+    <a href="https://twitter.com/eerok" class="icon-link">
+      <span class="fa fa-twitter"/>
+    </a>
+    <a href="https://www.xing.com/profile/Eero_KuusistoGussmann/" class="icon-link">
+      <span class="fa fa-xing"/>
+    </a>
+    <a href="https://www.linkedin.com/in/eero-kuusisto-gussmann/" class="icon-link">
+      <span class="fa fa-linkedin"/>
+    </a>
+    <a href="https://github.com/ek-g/" class="icon-link">
+      <span class="fa fa-github"/>
+    </a>
+  </p>
+  <p>© Copyright 2019-2020 – Eero Kuusisto-Gussmann – <a href="https://creativecommons.org/licenses/by/4.0/deed.de">CC-BY-4.0</a></p>
+  <p>Powered by <a href="https://rstudio.github.io/distill/">Distill for R Markdown</a> &amp; <a href="https://pages.github.com">GitHub Pages</a></p>
+</div>
+<!--/radix_placeholder_navigation_after_body-->
+
+
+</body>
+
+</html>

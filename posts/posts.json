@@ -1,5 +1,27 @@
 [
   {
+    "path": "posts/2020-03-30-diy-covid-19-dashboard/",
+    "title": "DIY Covid-19-Dashboard mit R und Shiny",
+    "description": "Ein Dashboard-Beispiel mit dynamischen Daten aus Google Sheets.",
+    "author": [
+      {
+        "name": "Eero Kuusisto-Gussmann",
+        "url": {}
+      }
+    ],
+    "date": "2020-03-29",
+    "categories": [
+      "R",
+      "Datenvisualisierung",
+      "Shiny",
+      "German"
+    ],
+    "preview": "posts/2020-03-30-diy-covid-19-dashboard/preview.png",
+    "last_modified": "2020-03-30T16:59:33+02:00",
+    "preview_width": 1500,
+    "preview_height": 1002
+  },
+  {
     "path": "posts/2020-01-15-datenaufbereitung-mit-r/",
     "title": "Datenaufbereitung mit R",
     "description": "Ein Beispiel mit Studienrendenzahlen in gesundheitswissenschaftlichen Studiengängen 1998-2018.",
