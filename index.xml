@@ -15,7 +15,7 @@
       <description>Ein Dashboard-Beispiel mit dynamischen Daten aus Google Sheets.</description>
       <guid>https://blog.kuusisto.de/posts/2020-03-30-diy-covid-19-dashboard</guid>
       <pubDate>So, 29 Mär 2020 00:00:00 +0000</pubDate>
-      <media:content url="https://blog.kuusisto.de/posts/2020-03-30-diy-covid-19-dashboard/preview.png" medium="image" type="image/png" width="1500" height="1002"/>
+      <media:content url="https://blog.kuusisto.de/posts/2020-03-30-diy-covid-19-dashboard/preview.png" medium="image" type="image/png" width="1494" height="893"/>
     </item>
     <item>
       <title>Datenaufbereitung mit R</title>
